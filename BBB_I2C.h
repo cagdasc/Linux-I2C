@@ -31,7 +31,8 @@ public:
     void writeByteBufferArduino(char DEV_ADD, uint8_t *value, uint8_t buff_len, int bus);
     uint8_t readBit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus);
     int8_t readByte(char DEV_ADD, char DATA_REGADD, int bus);
-    void readByteBuffer(char DEV_ADD, char DATA_REGADD, int bus, uint8_t *data, uint8_t lenght);
+    void readByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus);
+    void readByteBufferArduino(char DEV_ADD,uint8_t *data, uint8_t length, int bus);
     int16_t readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus);
 
 private:
