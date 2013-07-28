@@ -195,7 +195,7 @@ int8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
     return value[0];
 }
 
-void BBB_I2C::readByteBuffer(char DEV_ADD, char DATA_REGADD, int bus, uint8_t *data, uint8_t lenght) {
+void BBB_I2C::readByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -221,13 +221,38 @@ void BBB_I2C::readByteBuffer(char DEV_ADD, char DATA_REGADD, int bus, uint8_t *d
         exit(1);
     }
     
-    if (read(file, data, lenght) != 1) {
+    if (read(file, data, length) != length) {
         printf("Can not read data.\n");
         exit(1);
     }
 
     close(file);
 
+}
+
+void BBB_I2C::readByteBufferArduino(char DEV_ADD, uint8_t* data, uint8_t length, int bus) {
+        char path[20];
+
+    sprintf(path, "/dev/i2c-%d", bus);
+
+    int file;
+
+    if ((file = open(path, O_RDWR)) < 0) {
+        printf("%s do not open.\n", path);
+        exit(1);
+    }
+
+    if (ioctl(file, I2C_SLAVE, DEV_ADD) < 0) {
+        printf("Can not join I2C Bus\n");
+        exit(1);
+    }
+    
+    if (read(file, data, length) != length) {
+        printf("Can not read data.\n");
+        exit(1);
+    }
+
+    close(file);
 
 }
 
