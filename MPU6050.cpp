@@ -139,6 +139,18 @@ int16_t MPU6050::getTemperature() {
     return i2c.readWord(DEV_ADD, TEMP_OUT_H, TEMP_OUT_L, I2C_BUS);
 }
 
+void MPU6050::getMotions6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
+
+    *ax = i2c.readWord(DEV_ADD, ACCEL_XOUT_H, ACCEL_XOUT_L, 1);
+    *ay = i2c.readWord(DEV_ADD, ACCEL_YOUT_H, ACCEL_YOUT_L, 1);
+    *az = i2c.readWord(DEV_ADD, ACCEL_ZOUT_H, ACCEL_ZOUT_L, 1);
+
+    *gx = i2c.readWord(DEV_ADD, GYRO_XOUT_H, GYRO_XOUT_L, I2C_BUS);
+    *gy = i2c.readWord(DEV_ADD, GYRO_YOUT_H, GYRO_YOUT_L, I2C_BUS);
+    *gz = i2c.readWord(DEV_ADD, GYRO_ZOUT_H, GYRO_ZOUT_L, I2C_BUS);
+
+}
+
 void MPU6050::setDLPFMode(uint8_t mode) {
     uint8_t config = i2c.readByte(DEV_ADD, CONFIG, I2C_BUS);
     if (mode == 0) {
