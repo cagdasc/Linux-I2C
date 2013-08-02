@@ -260,18 +260,15 @@ void BBB_I2C::writeByteBufferArduinoNoExit(char DEV_ADD, uint8_t *value, uint8_t
 
     if ((file = open(path, O_RDWR)) < 0) {
         printf("%s do not open. Address %d.\n", path, DEV_ADD);
-        exit(1);
     }
 
     if (ioctl(file, I2C_SLAVE, DEV_ADD) < 0) {
         printf("Can not join I2C Bus. Address %d.\n", DEV_ADD);
-        exit(1);
     }
 
 
     if (write(file, value, buff_len) != buff_len) {
         printf("Can not write data. Address %d.\n",DEV_ADD);
-        exit(1);
     }
 
     close(file);
