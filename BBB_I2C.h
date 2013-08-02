@@ -1,7 +1,8 @@
 /* 
  * File:   BBB_I2C.h
- * Author: cagdas
- *
+ * Author: Cagdas Caglak
+ * E-mail: cagdascaglak@gmail.com
+ * Code is free but There is not warranty.
  * Created on July 26, 2013, 5:01 PM
  */
 
@@ -25,14 +26,23 @@ public:
     virtual ~BBB_I2C();
     
     void writeBit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, int bus);
+    void writeBitNoExit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, int bus);
     void writeByte(char DEV_ADD, char DATA_REGADD, char value, int bus);
+    void writeByteNoExit(char DEV_ADD, char DATA_REGADD, char value, int bus);
     void writeByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *value, uint8_t length, int bus);
+    void writeByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *value, uint8_t length, int bus);
     void writeByteArduino(char DEV_ADD, int8_t value, int bus);
+    void writeByteArduinoNoExit(char DEV_ADD, int8_t value, int bus);
     void writeByteBufferArduino(char DEV_ADD, uint8_t *value, uint8_t buff_len, int bus);
+    void writeByteBufferArduinoNoExit(char DEV_ADD, uint8_t *value, uint8_t buff_len, int bus);
+    
     uint8_t readBit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus);
     int8_t readByte(char DEV_ADD, char DATA_REGADD, int bus);
+    int8_t readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus);
     void readByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus);
+    void readByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus);
     void readByteBufferArduino(char DEV_ADD,uint8_t *data, uint8_t length, int bus);
+    void readByteBufferArduinoNoExit(char DEV_ADD,uint8_t *data, uint8_t length, int bus);
     int16_t readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus);
 
 private:
