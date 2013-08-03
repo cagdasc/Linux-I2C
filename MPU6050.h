@@ -1,7 +1,8 @@
 /* 
- * File:   MPU6050.h
- * Author: cagdas
- *
+ * File:   BBB_I2C.cpp
+ * Author: Cagdas Caglak
+ * E-mail: cagdascaglak@gmail.com
+ * Code is free but There is not warranty.
  * Created on July 26, 2013, 5:08 PM
  */
 
