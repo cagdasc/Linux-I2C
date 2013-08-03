@@ -279,6 +279,11 @@ uint8_t BBB_I2C::readBit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus
     return (temp >> bitNum) % 2;
 }
 
+uint8_t BBB_I2C::readBitNoExit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus) {
+    int8_t temp = readByteNoExit(DEV_ADD, DATA_REGADD, bus);
+    return (temp >> bitNum) % 2;
+}
+
 int8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
     char path[20];
 
@@ -471,6 +476,18 @@ int16_t BBB_I2C::readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
     int16_t msb = readByte(DEV_ADD, MSB, bus);
 
     int16_t lsb = readByte(DEV_ADD, LSB, bus);
+
+    msb = msb << 8;
+    msb += lsb;
+
+    return msb;
+}
+
+int16_t BBB_I2C::readWordNoExit(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
+
+    int16_t msb = readByteNoExit(DEV_ADD, MSB, bus);
+
+    int16_t lsb = readByteNoExit(DEV_ADD, LSB, bus);
 
     msb = msb << 8;
     msb += lsb;
