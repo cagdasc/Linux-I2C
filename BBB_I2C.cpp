@@ -6,6 +6,8 @@
  * Created on July 26, 2013, 5:01 PM
  * ----------------------------------------
  * 03/08/2013 ...NoExit() methods added and it doesn't include exit(1) function. Add Device Address in error messages.
+ * 23/08/2013 add writeBitsNoExit(..) and readBitsNoExit(..) for multiple  bits process.
+ * 24/08/2013 changed return type to readByte(..) and readByteNoExit(..). reorganization readWord(..) and readWordNoExit(..).
  */
 
 #include "BBB_I2C.h"
@@ -26,7 +28,7 @@ void BBB_I2C::writeBit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, i
     } else if (value == 1) {
         temp = temp | (1 << bitNum);
     } else {
-        printf("Value must be 0 or 1! --> Address %d.\n",DEV_ADD);
+        printf("Value must be 0 or 1! --> Address %d.\n", DEV_ADD);
         exit(1);
     }
 
@@ -41,8 +43,27 @@ void BBB_I2C::writeBitNoExit(char DEV_ADD, char DATA_REGADD, char value, int bit
     } else if (value == 1) {
         temp = temp | (1 << bitNum);
     } else {
-        printf("Value must be 0 or 1! --> Address %d.\n",DEV_ADD);
+        printf("Value must be 0 or 1! --> Address %d.\n", DEV_ADD);
     }
+
+    writeByte(DEV_ADD, DATA_REGADD, temp, bus);
+
+}
+
+void BBB_I2C::writeBitsNoExit(char DEV_ADD, char DATA_REGADD, char value, int length, int startBit, int bus) {
+    int8_t temp = readByte(DEV_ADD, DATA_REGADD, bus);
+    uint8_t bits = 1;
+    uint8_t i = 0;
+
+    while (i < length - 1) {
+        bits = (bits << 1);
+        ++bits;
+        ++i;
+    }
+
+    temp &= ~(bits << startBit);
+
+    temp |= (value << startBit);
 
     writeByte(DEV_ADD, DATA_REGADD, temp, bus);
 
@@ -198,6 +219,7 @@ void BBB_I2C::writeByteArduino(char DEV_ADD, int8_t value, int bus) {
     close(file);
 
 }
+
 void BBB_I2C::writeByteArduinoNoExit(char DEV_ADD, int8_t value, int bus) {
     char path[20];
 
@@ -268,7 +290,7 @@ void BBB_I2C::writeByteBufferArduinoNoExit(char DEV_ADD, uint8_t *value, uint8_t
 
 
     if (write(file, value, buff_len) != buff_len) {
-        printf("Can not write data. Address %d.\n",DEV_ADD);
+        printf("Can not write data. Address %d.\n", DEV_ADD);
     }
 
     close(file);
@@ -284,7 +306,12 @@ uint8_t BBB_I2C::readBitNoExit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, i
     return (temp >> bitNum) % 2;
 }
 
-int8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
+uint8_t BBB_I2C::readBitsNoExit(char DEV_ADD, char DATA_REGADD, uint8_t length, uint8_t startBit, int bus) {
+    int8_t temp = readByteNoExit(DEV_ADD, DATA_REGADD, bus);
+    return (temp >> startBit) % (uint8_t) pow(2, length);
+}
+
+uint8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -310,7 +337,7 @@ int8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
         exit(1);
     }
 
-    int8_t value[1];
+    uint8_t value[1];
 
     if (read(file, value, 1) != 1) {
         printf("Can not read data. Address %d.\n", DEV_ADD);
@@ -322,7 +349,7 @@ int8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
     return value[0];
 }
 
-int8_t BBB_I2C::readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus) {
+uint8_t BBB_I2C::readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -345,7 +372,7 @@ int8_t BBB_I2C::readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus) {
         printf("Can not write data. Address %d.\n", DEV_ADD);
     }
 
-    int8_t value[1];
+    uint8_t value[1];
 
     if (read(file, value, 1) != 1) {
         printf("Can not read data. Address %d.\n", DEV_ADD);
@@ -473,24 +500,18 @@ void BBB_I2C::readByteBufferArduinoNoExit(char DEV_ADD, uint8_t* data, uint8_t l
 
 int16_t BBB_I2C::readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
 
-    int16_t msb = readByte(DEV_ADD, MSB, bus);
+    uint8_t msb = readByte(DEV_ADD, MSB, bus);
 
-    int16_t lsb = readByte(DEV_ADD, LSB, bus);
+    uint8_t lsb = readByte(DEV_ADD, LSB, bus);
 
-    msb = msb << 8;
-    msb += lsb;
-
-    return msb;
+    return ((int16_t) msb << 8) +lsb;
 }
 
 int16_t BBB_I2C::readWordNoExit(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
 
-    int16_t msb = readByteNoExit(DEV_ADD, MSB, bus);
+    uint8_t msb = readByteNoExit(DEV_ADD, MSB, bus);
 
-    int16_t lsb = readByteNoExit(DEV_ADD, LSB, bus);
+    uint8_t lsb = readByteNoExit(DEV_ADD, LSB, bus);
 
-    msb = msb << 8;
-    msb += lsb;
-
-    return msb;
+    return ((int16_t) msb << 8) +lsb;
 }
