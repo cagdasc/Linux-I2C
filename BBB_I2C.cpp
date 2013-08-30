@@ -12,16 +12,7 @@
 
 #include "BBB_I2C.h"
 
-BBB_I2C::BBB_I2C() {
-}
-
-BBB_I2C::BBB_I2C(const BBB_I2C& orig) {
-}
-
-BBB_I2C::~BBB_I2C() {
-}
-
-void BBB_I2C::writeBit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, int bus) {
+void BBB_I2C::writeBit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t value, int bitNum, int bus) {
     int8_t temp = readByte(DEV_ADD, DATA_REGADD, bus);
     if (value == 0) {
         temp = temp & ~(1 << bitNum);
@@ -36,7 +27,7 @@ void BBB_I2C::writeBit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, i
 
 }
 
-void BBB_I2C::writeBitNoExit(char DEV_ADD, char DATA_REGADD, char value, int bitNum, int bus) {
+void BBB_I2C::writeBitNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t value, int bitNum, int bus) {
     int8_t temp = readByte(DEV_ADD, DATA_REGADD, bus);
     if (value == 0) {
         temp = temp & ~(1 << bitNum);
@@ -50,7 +41,7 @@ void BBB_I2C::writeBitNoExit(char DEV_ADD, char DATA_REGADD, char value, int bit
 
 }
 
-void BBB_I2C::writeBitsNoExit(char DEV_ADD, char DATA_REGADD, char value, int length, int startBit, int bus) {
+void BBB_I2C::writeBitsNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t value, int length, int startBit, int bus) {
     int8_t temp = readByte(DEV_ADD, DATA_REGADD, bus);
     uint8_t bits = 1;
     uint8_t i = 0;
@@ -69,7 +60,7 @@ void BBB_I2C::writeBitsNoExit(char DEV_ADD, char DATA_REGADD, char value, int le
 
 }
 
-void BBB_I2C::writeByte(char DEV_ADD, char DATA_REGADD, char value, int bus) {
+void BBB_I2C::writeByte(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t value, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -100,7 +91,7 @@ void BBB_I2C::writeByte(char DEV_ADD, char DATA_REGADD, char value, int bus) {
 
 }
 
-void BBB_I2C::writeByteNoExit(char DEV_ADD, char DATA_REGADD, char value, int bus) {
+void BBB_I2C::writeByteNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t value, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -128,7 +119,7 @@ void BBB_I2C::writeByteNoExit(char DEV_ADD, char DATA_REGADD, char value, int bu
 
 }
 
-void BBB_I2C::writeByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *value, uint8_t length, int bus) {
+void BBB_I2C::writeByteBuffer(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *value, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -145,7 +136,7 @@ void BBB_I2C::writeByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *value, ui
         exit(1);
     }
 
-    char buffer[1];
+    uint8_t buffer[1];
     buffer[0] = DATA_REGADD;
 
     if (write(file, buffer, 1) != 1) {
@@ -161,7 +152,7 @@ void BBB_I2C::writeByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *value, ui
     close(file);
 }
 
-void BBB_I2C::writeByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *value, uint8_t length, int bus) {
+void BBB_I2C::writeByteBufferNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *value, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -176,7 +167,7 @@ void BBB_I2C::writeByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *val
         printf("Can not join I2C Bus. Address %d.\n", DEV_ADD);
     }
 
-    char buffer[1];
+    uint8_t buffer[1];
     buffer[0] = DATA_REGADD;
 
     if (write(file, buffer, 1) != 1) {
@@ -190,7 +181,7 @@ void BBB_I2C::writeByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *val
     close(file);
 }
 
-void BBB_I2C::writeByteArduino(char DEV_ADD, int8_t value, int bus) {
+void BBB_I2C::writeByteArduino(uint8_t DEV_ADD, int8_t value, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -220,7 +211,7 @@ void BBB_I2C::writeByteArduino(char DEV_ADD, int8_t value, int bus) {
 
 }
 
-void BBB_I2C::writeByteArduinoNoExit(char DEV_ADD, int8_t value, int bus) {
+void BBB_I2C::writeByteArduinoNoExit(uint8_t DEV_ADD, int8_t value, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -247,7 +238,7 @@ void BBB_I2C::writeByteArduinoNoExit(char DEV_ADD, int8_t value, int bus) {
 
 }
 
-void BBB_I2C::writeByteBufferArduino(char DEV_ADD, uint8_t *value, uint8_t buff_len, int bus) {
+void BBB_I2C::writeByteBufferArduino(uint8_t DEV_ADD, uint8_t *value, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -265,7 +256,7 @@ void BBB_I2C::writeByteBufferArduino(char DEV_ADD, uint8_t *value, uint8_t buff_
     }
 
 
-    if (write(file, value, buff_len) != buff_len) {
+    if (write(file, value, length) != length) {
         printf("Can not write data. Address %d.\n", DEV_ADD);
         exit(1);
     }
@@ -273,7 +264,7 @@ void BBB_I2C::writeByteBufferArduino(char DEV_ADD, uint8_t *value, uint8_t buff_
     close(file);
 }
 
-void BBB_I2C::writeByteBufferArduinoNoExit(char DEV_ADD, uint8_t *value, uint8_t buff_len, int bus) {
+void BBB_I2C::writeByteBufferArduinoNoExit(uint8_t DEV_ADD, uint8_t *value, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -289,29 +280,29 @@ void BBB_I2C::writeByteBufferArduinoNoExit(char DEV_ADD, uint8_t *value, uint8_t
     }
 
 
-    if (write(file, value, buff_len) != buff_len) {
+    if (write(file, value, length) != length) {
         printf("Can not write data. Address %d.\n", DEV_ADD);
     }
 
     close(file);
 }
 
-uint8_t BBB_I2C::readBit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus) {
+uint8_t BBB_I2C::readBit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t bitNum, int bus) {
     int8_t temp = readByte(DEV_ADD, DATA_REGADD, bus);
     return (temp >> bitNum) % 2;
 }
 
-uint8_t BBB_I2C::readBitNoExit(char DEV_ADD, char DATA_REGADD, uint8_t bitNum, int bus) {
+uint8_t BBB_I2C::readBitNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t bitNum, int bus) {
     int8_t temp = readByteNoExit(DEV_ADD, DATA_REGADD, bus);
     return (temp >> bitNum) % 2;
 }
 
-uint8_t BBB_I2C::readBitsNoExit(char DEV_ADD, char DATA_REGADD, uint8_t length, uint8_t startBit, int bus) {
+uint8_t BBB_I2C::readBitsNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t length, uint8_t startBit, int bus) {
     int8_t temp = readByteNoExit(DEV_ADD, DATA_REGADD, bus);
     return (temp >> startBit) % (uint8_t) pow(2, length);
 }
 
-uint8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
+uint8_t BBB_I2C::readByte(uint8_t DEV_ADD, uint8_t DATA_REGADD, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -349,7 +340,7 @@ uint8_t BBB_I2C::readByte(char DEV_ADD, char DATA_REGADD, int bus) {
     return value[0];
 }
 
-uint8_t BBB_I2C::readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus) {
+uint8_t BBB_I2C::readByteNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -383,7 +374,7 @@ uint8_t BBB_I2C::readByteNoExit(char DEV_ADD, char DATA_REGADD, int bus) {
     return value[0];
 }
 
-void BBB_I2C::readByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus) {
+void BBB_I2C::readByteBuffer(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *data, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -418,7 +409,7 @@ void BBB_I2C::readByteBuffer(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint
 
 }
 
-void BBB_I2C::readByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *data, uint8_t length, int bus) {
+void BBB_I2C::readByteBufferNoExit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *data, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -449,7 +440,7 @@ void BBB_I2C::readByteBufferNoExit(char DEV_ADD, char DATA_REGADD, uint8_t *data
 
 }
 
-void BBB_I2C::readByteBufferArduino(char DEV_ADD, uint8_t* data, uint8_t length, int bus) {
+void BBB_I2C::readByteBufferArduino(uint8_t DEV_ADD, uint8_t* data, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -475,7 +466,7 @@ void BBB_I2C::readByteBufferArduino(char DEV_ADD, uint8_t* data, uint8_t length,
 
 }
 
-void BBB_I2C::readByteBufferArduinoNoExit(char DEV_ADD, uint8_t* data, uint8_t length, int bus) {
+void BBB_I2C::readByteBufferArduinoNoExit(uint8_t DEV_ADD, uint8_t* data, uint8_t length, int bus) {
     char path[20];
 
     sprintf(path, "/dev/i2c-%d", bus);
@@ -498,7 +489,7 @@ void BBB_I2C::readByteBufferArduinoNoExit(char DEV_ADD, uint8_t* data, uint8_t l
 
 }
 
-int16_t BBB_I2C::readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
+int16_t BBB_I2C::readWord(uint8_t DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
 
     uint8_t msb = readByte(DEV_ADD, MSB, bus);
 
@@ -507,7 +498,7 @@ int16_t BBB_I2C::readWord(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
     return ((int16_t) msb << 8) +lsb;
 }
 
-int16_t BBB_I2C::readWordNoExit(char DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
+int16_t BBB_I2C::readWordNoExit(uint8_t DEV_ADD, uint8_t MSB, uint8_t LSB, int bus) {
 
     uint8_t msb = readByteNoExit(DEV_ADD, MSB, bus);
 
