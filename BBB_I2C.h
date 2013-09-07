@@ -10,11 +10,9 @@
 #define	BBB_I2C_H
 
 #include <math.h>
-#include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
