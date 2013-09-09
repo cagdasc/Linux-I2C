@@ -1,7 +1,7 @@
 BeagleBoneBlack-I2C
 ===================
 
-BeagleBone Black I2C Communication Library
+BeagleBone Black I2C Library
    
    This code was written for my own project by me. I tried this code on BeagleBone Black Ubuntu 12.10. It's work with Arduino UNO R3. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
 
