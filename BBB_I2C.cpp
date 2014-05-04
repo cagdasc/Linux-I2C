@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Cagdas Caglak, cagdascaglak@gmail.com, http://expcodes.blogspot.com/
+ * Copyright 2014 Cagdas Caglak, cagdascaglak@gmail.com, http://expcodes.blogspot.com/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,14 +13,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Changes
- *
- * 03/08/2013 ...NoExit() methods added and it doesn't include exit(1) function. Add Device Address in error messages.
- * 23/08/2013 add writeBitsNoExit(..) and readBitsNoExit(..) for multiple  bits process.
- * 24/08/2013 changed return type to readByte(..) and readByteNoExit(..). reorganization readWord(..) and readWordNoExit(..).
- * 07/09/2013 added constructor for changed to i2c bus.(busAddr)
- * 05/10/2013 added destructor for free i2c bus path array.
  */
 
 #include "BBB_I2C.h"
