@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-   This code was written for my own project by me. I tried this code on BeagleBone Black Ubuntu 12.10. It's work with Arduino UNO R3 and MPU6050 6 axis Accelerometer and Gyroscope. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
-=======
-=======
->>>>>>> dd4f752fa90a4df01b24fd41ef600664ebcb0f22
 BeagleBoneBlack-I2C
 ===================
 
 BeagleBone Black I2C Library
-   
-<<<<<<< HEAD
-   This code was written for my own project by me. I tried this code on BeagleBone Black Ubuntu 12.10. It's work with Arduino UNO R3. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
-=======
-This code was written for my own project by me. I try this code on BeagleBone Black Ubuntu 12.10. It's work with Arduino UNO R3. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
+
+This library is about I2C communication for BeagleBone Black. It tested on Ubuntu 14.04 and for fine. It has some functions to work with Arduino UNO R3. I working on MPU6050, ADXL345, HMC5883L chip for implement I2C library. You can find MPU6050 test example. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
 This library has specific methods for Arduino. You can communicate with Arduino easily.
 Some methods have "NoExit" suffix. This means if there is an error accour while reading or writing, the connection doesn't terminated.
 
@@ -31,6 +23,3 @@ Some methods have "NoExit" suffix. This means if there is an error accour while 
 	 
 	 You should have received a copy of the GNU General Public License
 	 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
->>>>>>> dd4f752fa90a4df01b24fd41ef600664ebcb0f22
-

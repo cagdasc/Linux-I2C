@@ -140,6 +140,7 @@
 class ADXL345 {
 public:
     ADXL345();
+    ADXL345(BBB_I2C &i2c);
     ADXL345(const ADXL345& orig);
     virtual ~ADXL345();
     

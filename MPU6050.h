@@ -85,6 +85,7 @@
 class MPU6050 {
 public:
     MPU6050();
+    MPU6050(BBB_I2C &i2c);
     MPU6050(const MPU6050& orig);
     virtual ~MPU6050();
 

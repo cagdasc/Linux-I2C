@@ -75,6 +75,7 @@
 class HMC5883L {
 public:
     HMC5883L();
+    HMC5883L(BBB_I2C &i2c);
     HMC5883L(const HMC5883L& orig);
     virtual ~HMC5883L();
 
