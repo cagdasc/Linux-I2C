@@ -1,5 +1,0 @@
-build/Debug/GNU-Linux-x86/MPU6050.o: MPU6050.cpp MPU6050.h BBB_I2C.h
-
-MPU6050.h:
-
-BBB_I2C.h:

@@ -1,5 +1,0 @@
-build/Debug/GNU-Linux-x86/ADXL345.o: ADXL345.cpp ADXL345.h BBB_I2C.h
-
-ADXL345.h:
-
-BBB_I2C.h:
