@@ -51,7 +51,7 @@ BBB_I2C::BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr) {
 	sprintf(path, "/dev/i2c-%d", this->busAddr);
 }
 
-void BBB_I2C::setPath(uint8_t busAddr){
+void BBB_I2C::setBusAddress(uint8_t busAddr){
 	free(path);
 	this->busAddr = busAddr;
 	this->path = this->path = (char*) calloc(PATH_SIZE, sizeof(char));
