@@ -39,6 +39,7 @@ public:
 	~BBB_I2C();
 
 	int openConnection();
+	void setBusAddress(uint8_t busAddr);
 
 	//Write Methods
 	void writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum);
