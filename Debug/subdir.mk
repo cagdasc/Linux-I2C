@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../BBB_I2C.cpp \
 ../HMC5883L.cpp \
 ../MPU6050.cpp \
+../TestArduino.cpp \
 ../TestMPU6050.cpp 
 
 OBJS += \
@@ -15,6 +16,7 @@ OBJS += \
 ./BBB_I2C.o \
 ./HMC5883L.o \
 ./MPU6050.o \
+./TestArduino.o \
 ./TestMPU6050.o 
 
 CPP_DEPS += \
@@ -22,14 +24,15 @@ CPP_DEPS += \
 ./BBB_I2C.d \
 ./HMC5883L.d \
 ./MPU6050.d \
+./TestArduino.d \
 ./TestMPU6050.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ../%.cpp
 	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/usr/local/arm/arm-none-linux-gnueabi -I/usr/local/arm/arm-none-linux-gnueabi/arm-none-linux-gnueabi/sysroot/usr/include -I/usr/local/arm/arm-none-linux-gnueabi/arm-none-linux-gnueabi/sysroot/usr/lib -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Invoking: Cross G++ Compiler'
+	arm-none-linux-gnueabi-g++ -I/usr/local/arm/arm-none-linux-gnueabi/arm-none-linux-gnueabi/sysroot/usr/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

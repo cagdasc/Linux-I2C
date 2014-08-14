@@ -1,21 +1,23 @@
 /*
-    Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
+ Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "HMC5883L.h"
+
+namespace cacaosd_hmc5883l {
 
 HMC5883L::HMC5883L() :
 		i2c(1) {
@@ -44,19 +46,19 @@ void HMC5883L::setSamplesAvarage(uint8_t avarage) {
 	switch (avarage) {
 	case 0:
 		i2c.writeMoreBitsNoExit(CONFIG_A, SAMPLES_AVARAGE_1,
-				SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
+		SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
 		break;
 	case 1:
 		i2c.writeMoreBitsNoExit(CONFIG_A, SAMPLES_AVARAGE_2,
-				SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
+		SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
 		break;
 	case 2:
 		i2c.writeMoreBitsNoExit(CONFIG_A, SAMPLES_AVARAGE_4,
-				SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
+		SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
 		break;
 	case 3:
 		i2c.writeMoreBitsNoExit(CONFIG_A, SAMPLES_AVARAGE_8,
-				SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
+		SAMPLES_AVARAGE_LENGTH, SAMPLES_AVARAGE_START);
 		break;
 	default:
 		break;
@@ -66,38 +68,38 @@ void HMC5883L::setSamplesAvarage(uint8_t avarage) {
 
 uint8_t HMC5883L::getSamplesAvarage() {
 	return i2c.readMoreBitsNoExit(CONFIG_A, SAMPLES_AVARAGE_LENGTH,
-			SAMPLES_AVARAGE_START);
+	SAMPLES_AVARAGE_START);
 }
 
 void HMC5883L::setOutputRate(uint8_t rate) {
 	switch (rate) {
 	case 0:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_0,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 1:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_1,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 2:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_2,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 3:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_3,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 4:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_4,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 5:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_5,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 6:
 		i2c.writeMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_6,
-				OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
+		OUTPUT_RATE_LENGTH, OUTPUT_RATE_START);
 		break;
 	case 7:
 		printf("Reserved.\n");
@@ -109,22 +111,22 @@ void HMC5883L::setOutputRate(uint8_t rate) {
 
 uint8_t HMC5883L::getOutputRate() {
 	return i2c.readMoreBitsNoExit(CONFIG_A, OUTPUT_RATE_LENGTH,
-			OUTPUT_RATE_START);
+	OUTPUT_RATE_START);
 }
 
 void HMC5883L::setMeasurementMode(uint8_t mode) {
 	switch (mode) {
 	case 0:
 		i2c.writeMoreBitsNoExit(CONFIG_A, MEASUREMENT_NORMAL,
-				MEASUREMENT_LENGTH, MEASUREMENT_START);
+		MEASUREMENT_LENGTH, MEASUREMENT_START);
 		break;
 	case 1:
 		i2c.writeMoreBitsNoExit(CONFIG_A, MEASUREMENT_POSITIVE,
-				MEASUREMENT_LENGTH, MEASUREMENT_START);
+		MEASUREMENT_LENGTH, MEASUREMENT_START);
 		break;
 	case 2:
 		i2c.writeMoreBitsNoExit(CONFIG_A, MEASUREMENT_NEGATIVE,
-				MEASUREMENT_LENGTH, MEASUREMENT_START);
+		MEASUREMENT_LENGTH, MEASUREMENT_START);
 		break;
 	default:
 		break;
@@ -133,7 +135,7 @@ void HMC5883L::setMeasurementMode(uint8_t mode) {
 
 uint8_t HMC5883L::getMeasurementMode() {
 	return i2c.readMoreBitsNoExit(CONFIG_A, MEASUREMENT_LENGTH,
-			MEASUREMENT_START);
+	MEASUREMENT_START);
 }
 
 void HMC5883L::setMeasurementGain(uint8_t gain) {
@@ -189,7 +191,7 @@ void HMC5883L::setOperationMode(uint8_t mode) {
 
 uint8_t HMC5883L::getOperationMode() {
 	return i2c.readMoreBitsNoExit(MODE_REG, OPERATION_MODE_LENGTH,
-			OPERATION_MODE_START);
+	OPERATION_MODE_START);
 }
 
 int16_t HMC5883L::getMagnitudeX() {
@@ -211,3 +213,5 @@ uint8_t HMC5883L::getRDYStatus() {
 uint8_t HMC5883L::getLockStatus() {
 	return i2c.readBitNoExit(STATUS_REG, LOCK_BIT);
 }
+
+}  // namespace cacaosd_hmc5883l

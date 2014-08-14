@@ -1,21 +1,22 @@
 /*
-    Copyright (C) 2014  Cagdas Caglak http://expcodes.blogspot.com.tr/
+ Copyright (C) 2014  Cagdas Caglak http://expcodes.blogspot.com.tr/
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "BBB_I2C.h"
+namespace cacaosd_bbb_i2c {
 
 /** Default Constructor
  * @funtion BBB_I2C()
@@ -51,10 +52,10 @@ BBB_I2C::BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr) {
 	sprintf(path, "/dev/i2c-%d", this->busAddr);
 }
 
-void BBB_I2C::setBusAddress(uint8_t busAddr){
+void BBB_I2C::setBusAddress(uint8_t busAddr) {
 	free(path);
 	this->busAddr = busAddr;
-	this->path = this->path = (char*) calloc(PATH_SIZE, sizeof(char));
+	this->path = (char*) calloc(PATH_SIZE, sizeof(char));
 	sprintf(path, "/dev/i2c-%d", this->busAddr);
 }
 
@@ -197,18 +198,6 @@ void BBB_I2C::writeMoreBitsNoExit(uint8_t DATA_REGADD, uint8_t data,
  */
 void BBB_I2C::writeByte(uint8_t DATA_REGADD, uint8_t data) {
 
-//	int file;
-//
-//	if ((file = open(path, O_RDWR)) < 0) {
-//		printf("%s do not open. Address %d.\n", path, DEV_ADD);
-//		exit(1);
-//	}
-//
-//	if (ioctl(file, I2C_SLAVE, DEV_ADD) < 0) {
-//		printf("Can not join I2C Bus. Address %d.\n", DEV_ADD);
-//		exit(1);
-//	}
-
 	int file = openConnection();
 
 	uint8_t buffer[2];
@@ -233,16 +222,6 @@ void BBB_I2C::writeByte(uint8_t DATA_REGADD, uint8_t data) {
  * @return void.
  */
 void BBB_I2C::writeByteNoExit(uint8_t DATA_REGADD, uint8_t data) {
-
-//	int file;
-//
-//	if ((file = open(path, O_RDWR)) < 0) {
-//		printf("%s do not open. Address %d.\n", path, DEV_ADD);
-//	}
-//
-//	if (ioctl(file, I2C_SLAVE, DEV_ADD) < 0) {
-//		printf("Can not join I2C Bus. Address %d.\n", DEV_ADD);
-//	}
 
 	int file = openConnection();
 
@@ -634,3 +613,5 @@ int16_t BBB_I2C::readWordNoExit(uint8_t MSB, uint8_t LSB) {
 
 	return ((int16_t) msb << 8) + lsb;
 }
+
+}  // namespace cacaosd_bbb_i2c

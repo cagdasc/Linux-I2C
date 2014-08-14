@@ -1,19 +1,19 @@
 /*
-    Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
+ Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef ADXL345_H
 #define	ADXL345_H
@@ -146,202 +146,207 @@
 #define ADXL345_FIFOSTAT_LENGTH_BIT         5
 #define ADXL345_FIFOSTAT_BIT_START      6
 
+using namespace cacaosd_bbb_i2c;
+
+namespace cacaosd_adxl345 {
 
 class ADXL345 {
 public:
-    ADXL345();
-    ADXL345(BBB_I2C &i2c);
-    ADXL345(const ADXL345& orig);
-    virtual ~ADXL345();
-    
-        void initialize();
-        bool testConnection();
+	ADXL345();
+	ADXL345(BBB_I2C &i2c);
+	ADXL345(const ADXL345& orig);
+	virtual ~ADXL345();
 
-        // DEVID register
-        uint8_t getDeviceID();
-        
-        // THRESH_TAP register
-        uint8_t getTapThreshold();
-        void setTapThreshold(uint8_t threshold);
+	void initialize();
+	bool testConnection();
 
-        // OFS* registers
-        void getOffset(int8_t* x, int8_t* y, int8_t* z);
-        void setOffset(int8_t x, int8_t y, int8_t z);
-        int8_t getOffsetX();
-        void setOffsetX(int8_t x);
-        int8_t getOffsetY();
-        void setOffsetY(int8_t y);
-        int8_t getOffsetZ();
-        void setOffsetZ(int8_t z);
-        
-        // DUR register
-        uint8_t getTapDuration();
-        void setTapDuration(uint8_t duration);
-        
-        // LATENT register
-        uint8_t getDoubleTapLatency();
-        void setDoubleTapLatency(uint8_t latency);
-        
-        // WINDOW register
-        uint8_t getDoubleTapWindow();
-        void setDoubleTapWindow(uint8_t window);
-        
-        // THRESH_ACT register
-        uint8_t getActivityThreshold();
-        void setActivityThreshold(uint8_t threshold);
-        
-        // THRESH_INACT register
-        uint8_t getInactivityThreshold();
-        void setInactivityThreshold(uint8_t threshold);
+	// DEVID register
+	uint8_t getDeviceID();
 
-        // TIME_INACT register
-        uint8_t getInactivityTime();
-        void setInactivityTime(uint8_t time);
-        
-        // ACT_INACT_CTL register
-        bool getActivityAC();
-        void setActivityAC(bool enabled);
-        bool getActivityXEnabled();
-        void setActivityXEnabled(bool enabled);
-        bool getActivityYEnabled();
-        void setActivityYEnabled(bool enabled);
-        bool getActivityZEnabled();
-        void setActivityZEnabled(bool enabled);
-        bool getInactivityAC();
-        void setInactivityAC(bool enabled);
-        bool getInactivityXEnabled();
-        void setInactivityXEnabled(bool enabled);
-        bool getInactivityYEnabled();
-        void setInactivityYEnabled(bool enabled);
-        bool getInactivityZEnabled();
-        void setInactivityZEnabled(bool enabled);
-        
-        // THRESH_FF register
-        uint8_t getFreefallThreshold();
-        void setFreefallThreshold(uint8_t threshold);
-        
-        // TIME_FF register
-        uint8_t getFreefallTime();
-        void setFreefallTime(uint8_t time);
-        
-        // TAP_AXES register
-        bool getTapAxisSuppress();
-        void setTapAxisSuppress(bool enabled);
-        bool getTapAxisXEnabled();
-        void setTapAxisXEnabled(bool enabled);
-        bool getTapAxisYEnabled();
-        void setTapAxisYEnabled(bool enabled);
-        bool getTapAxisZEnabled();
-        void setTapAxisZEnabled(bool enabled);
-        
-        // ACT_TAP_STATUS register
-        bool getActivitySourceX();
-        bool getActivitySourceY();
-        bool getActivitySourceZ();
-        bool getAsleep();
-        bool getTapSourceX();
-        bool getTapSourceY();
-        bool getTapSourceZ();
-        
-        // BW_RATE register
-        bool getLowPowerEnabled();
-        void setLowPowerEnabled(bool enabled);
-        uint8_t getRate();
-        void setRate(uint8_t rate);
+	// THRESH_TAP register
+	uint8_t getTapThreshold();
+	void setTapThreshold(uint8_t threshold);
 
-        // POWER_CTL register
-        bool getLinkEnabled();
-        void setLinkEnabled(bool enabled);
-        bool getAutoSleepEnabled();
-        void setAutoSleepEnabled(bool enabled);
-        bool getMeasureEnabled();
-        void setMeasureEnabled(bool enabled);
-        bool getSleepEnabled();
-        void setSleepEnabled(bool enabled);
-        uint8_t getWakeupFrequency();
-        void setWakeupFrequency(uint8_t frequency);
-        
-        // INT_ENABLE register
-        bool getIntDataReadyEnabled();
-        void setIntDataReadyEnabled(bool enabled);
-        bool getIntSingleTapEnabled();
-        void setIntSingleTapEnabled(bool enabled);
-        bool getIntDoubleTapEnabled();
-        void setIntDoubleTapEnabled(bool enabled);
-        bool getIntActivityEnabled();
-        void setIntActivityEnabled(bool enabled);
-        bool getIntInactivityEnabled();
-        void setIntInactivityEnabled(bool enabled);
-        bool getIntFreefallEnabled();
-        void setIntFreefallEnabled(bool enabled);
-        bool getIntWatermarkEnabled();
-        void setIntWatermarkEnabled(bool enabled);
-        bool getIntOverrunEnabled();
-        void setIntOverrunEnabled(bool enabled);
-        
-        // INT_MAP register
-        uint8_t getIntDataReadyPin();
-        void setIntDataReadyPin(uint8_t pin);
-        uint8_t getIntSingleTapPin();
-        void setIntSingleTapPin(uint8_t pin);
-        uint8_t getIntDoubleTapPin();
-        void setIntDoubleTapPin(uint8_t pin);
-        uint8_t getIntActivityPin();
-        void setIntActivityPin(uint8_t pin);
-        uint8_t getIntInactivityPin();
-        void setIntInactivityPin(uint8_t pin);
-        uint8_t getIntFreefallPin();
-        void setIntFreefallPin(uint8_t pin);
-        uint8_t getIntWatermarkPin();
-        void setIntWatermarkPin(uint8_t pin);
-        uint8_t getIntOverrunPin();
-        void setIntOverrunPin(uint8_t pin);
+	// OFS* registers
+	void getOffset(int8_t* x, int8_t* y, int8_t* z);
+	void setOffset(int8_t x, int8_t y, int8_t z);
+	int8_t getOffsetX();
+	void setOffsetX(int8_t x);
+	int8_t getOffsetY();
+	void setOffsetY(int8_t y);
+	int8_t getOffsetZ();
+	void setOffsetZ(int8_t z);
 
-        // INT_SOURCE register
-        uint8_t getIntDataReadySource();
-        uint8_t getIntSingleTapSource();
-        uint8_t getIntDoubleTapSource();
-        uint8_t getIntActivitySource();
-        uint8_t getIntInactivitySource();
-        uint8_t getIntFreefallSource();
-        uint8_t getIntWatermarkSource();
-        uint8_t getIntOverrunSource();
-        
-        // DATA_FORMAT register
-        uint8_t getSelfTestEnabled();
-        void setSelfTestEnabled(uint8_t enabled);
-        uint8_t getSPIMode();
-        void setSPIMode(uint8_t mode);
-        uint8_t getInterruptMode();
-        void setInterruptMode(uint8_t mode);
-        uint8_t getFullResolution();
-        void setFullResolution(uint8_t resolution);
-        uint8_t getDataJustification();
-        void setDataJustification(uint8_t justification);
-        uint8_t getRange();
-        void setRange(uint8_t range);
+	// DUR register
+	uint8_t getTapDuration();
+	void setTapDuration(uint8_t duration);
 
-        // DATA* registers
-        void getAcceleration(int16_t* x, int16_t* y, int16_t* z);
-        int16_t getAccelerationX();
-        int16_t getAccelerationY();
-        int16_t getAccelerationZ();
+	// LATENT register
+	uint8_t getDoubleTapLatency();
+	void setDoubleTapLatency(uint8_t latency);
 
-        // FIFO_CTL register
-        uint8_t getFIFOMode();
-        void setFIFOMode(uint8_t mode);
-        uint8_t getFIFOTriggerInterruptPin();
-        void setFIFOTriggerInterruptPin(uint8_t interrupt);
-        uint8_t getFIFOSamples();
-        void setFIFOSamples(uint8_t size);
-        
-        // FIFO_STATUS register
-        bool getFIFOTriggerOccurred();
-        uint8_t getFIFOLength();
-    
+	// WINDOW register
+	uint8_t getDoubleTapWindow();
+	void setDoubleTapWindow(uint8_t window);
+
+	// THRESH_ACT register
+	uint8_t getActivityThreshold();
+	void setActivityThreshold(uint8_t threshold);
+
+	// THRESH_INACT register
+	uint8_t getInactivityThreshold();
+	void setInactivityThreshold(uint8_t threshold);
+
+	// TIME_INACT register
+	uint8_t getInactivityTime();
+	void setInactivityTime(uint8_t time);
+
+	// ACT_INACT_CTL register
+	bool getActivityAC();
+	void setActivityAC(bool enabled);
+	bool getActivityXEnabled();
+	void setActivityXEnabled(bool enabled);
+	bool getActivityYEnabled();
+	void setActivityYEnabled(bool enabled);
+	bool getActivityZEnabled();
+	void setActivityZEnabled(bool enabled);
+	bool getInactivityAC();
+	void setInactivityAC(bool enabled);
+	bool getInactivityXEnabled();
+	void setInactivityXEnabled(bool enabled);
+	bool getInactivityYEnabled();
+	void setInactivityYEnabled(bool enabled);
+	bool getInactivityZEnabled();
+	void setInactivityZEnabled(bool enabled);
+
+	// THRESH_FF register
+	uint8_t getFreefallThreshold();
+	void setFreefallThreshold(uint8_t threshold);
+
+	// TIME_FF register
+	uint8_t getFreefallTime();
+	void setFreefallTime(uint8_t time);
+
+	// TAP_AXES register
+	bool getTapAxisSuppress();
+	void setTapAxisSuppress(bool enabled);
+	bool getTapAxisXEnabled();
+	void setTapAxisXEnabled(bool enabled);
+	bool getTapAxisYEnabled();
+	void setTapAxisYEnabled(bool enabled);
+	bool getTapAxisZEnabled();
+	void setTapAxisZEnabled(bool enabled);
+
+	// ACT_TAP_STATUS register
+	bool getActivitySourceX();
+	bool getActivitySourceY();
+	bool getActivitySourceZ();
+	bool getAsleep();
+	bool getTapSourceX();
+	bool getTapSourceY();
+	bool getTapSourceZ();
+
+	// BW_RATE register
+	bool getLowPowerEnabled();
+	void setLowPowerEnabled(bool enabled);
+	uint8_t getRate();
+	void setRate(uint8_t rate);
+
+	// POWER_CTL register
+	bool getLinkEnabled();
+	void setLinkEnabled(bool enabled);
+	bool getAutoSleepEnabled();
+	void setAutoSleepEnabled(bool enabled);
+	bool getMeasureEnabled();
+	void setMeasureEnabled(bool enabled);
+	bool getSleepEnabled();
+	void setSleepEnabled(bool enabled);
+	uint8_t getWakeupFrequency();
+	void setWakeupFrequency(uint8_t frequency);
+
+	// INT_ENABLE register
+	bool getIntDataReadyEnabled();
+	void setIntDataReadyEnabled(bool enabled);
+	bool getIntSingleTapEnabled();
+	void setIntSingleTapEnabled(bool enabled);
+	bool getIntDoubleTapEnabled();
+	void setIntDoubleTapEnabled(bool enabled);
+	bool getIntActivityEnabled();
+	void setIntActivityEnabled(bool enabled);
+	bool getIntInactivityEnabled();
+	void setIntInactivityEnabled(bool enabled);
+	bool getIntFreefallEnabled();
+	void setIntFreefallEnabled(bool enabled);
+	bool getIntWatermarkEnabled();
+	void setIntWatermarkEnabled(bool enabled);
+	bool getIntOverrunEnabled();
+	void setIntOverrunEnabled(bool enabled);
+
+	// INT_MAP register
+	uint8_t getIntDataReadyPin();
+	void setIntDataReadyPin(uint8_t pin);
+	uint8_t getIntSingleTapPin();
+	void setIntSingleTapPin(uint8_t pin);
+	uint8_t getIntDoubleTapPin();
+	void setIntDoubleTapPin(uint8_t pin);
+	uint8_t getIntActivityPin();
+	void setIntActivityPin(uint8_t pin);
+	uint8_t getIntInactivityPin();
+	void setIntInactivityPin(uint8_t pin);
+	uint8_t getIntFreefallPin();
+	void setIntFreefallPin(uint8_t pin);
+	uint8_t getIntWatermarkPin();
+	void setIntWatermarkPin(uint8_t pin);
+	uint8_t getIntOverrunPin();
+	void setIntOverrunPin(uint8_t pin);
+
+	// INT_SOURCE register
+	uint8_t getIntDataReadySource();
+	uint8_t getIntSingleTapSource();
+	uint8_t getIntDoubleTapSource();
+	uint8_t getIntActivitySource();
+	uint8_t getIntInactivitySource();
+	uint8_t getIntFreefallSource();
+	uint8_t getIntWatermarkSource();
+	uint8_t getIntOverrunSource();
+
+	// DATA_FORMAT register
+	uint8_t getSelfTestEnabled();
+	void setSelfTestEnabled(uint8_t enabled);
+	uint8_t getSPIMode();
+	void setSPIMode(uint8_t mode);
+	uint8_t getInterruptMode();
+	void setInterruptMode(uint8_t mode);
+	uint8_t getFullResolution();
+	void setFullResolution(uint8_t resolution);
+	uint8_t getDataJustification();
+	void setDataJustification(uint8_t justification);
+	uint8_t getRange();
+	void setRange(uint8_t range);
+
+	// DATA* registers
+	void getAcceleration(int16_t* x, int16_t* y, int16_t* z);
+	int16_t getAccelerationX();
+	int16_t getAccelerationY();
+	int16_t getAccelerationZ();
+
+	// FIFO_CTL register
+	uint8_t getFIFOMode();
+	void setFIFOMode(uint8_t mode);
+	uint8_t getFIFOTriggerInterruptPin();
+	void setFIFOTriggerInterruptPin(uint8_t interrupt);
+	uint8_t getFIFOSamples();
+	void setFIFOSamples(uint8_t size);
+
+	// FIFO_STATUS register
+	bool getFIFOTriggerOccurred();
+	uint8_t getFIFOLength();
+
 private:
-    BBB_I2C i2c;
+	BBB_I2C i2c;
 };
+
+}  // namespace cacaosd_adxl345
 
 #endif	/* ADXL345_H */
 

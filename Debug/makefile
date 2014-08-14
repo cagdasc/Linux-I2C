@@ -42,14 +42,14 @@ all: libBeagleBoneBlack-I2C.a
 # Tool invocations
 libBeagleBoneBlack-I2C.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: GCC Archiver'
+	@echo 'Invoking: Cross GCC Archiver'
 	arm-none-linux-gnueabi-ar -r  "libBeagleBoneBlack-I2C.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libBeagleBoneBlack-I2C.a
+	-$(RM) $(C++_DEPS)$(OBJS)$(C_DEPS)$(CC_DEPS)$(ARCHIVES)$(CPP_DEPS)$(CXX_DEPS)$(C_UPPER_DEPS) libBeagleBoneBlack-I2C.a
 	-@echo ' '
 
 .PHONY: all clean dependents

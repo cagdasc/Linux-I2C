@@ -19,6 +19,8 @@
 
 #define DEV_ADD 0x21
 #define I2C_BUS 1
+using namespace cacaosd_bbb_i2c;
+
 
 int main(int argc, char **argv) {
 

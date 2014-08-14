@@ -1,128 +1,44 @@
-#
-#  There exist several targets which are by default empty and which can be 
-#  used for execution of your targets. These targets are usually executed 
-#  before and after some main targets. They are: 
-#
-#     .build-pre:              called before 'build' target
-#     .build-post:             called after 'build' target
-#     .clean-pre:              called before 'clean' target
-#     .clean-post:             called after 'clean' target
-#     .clobber-pre:            called before 'clobber' target
-#     .clobber-post:           called after 'clobber' target
-#     .all-pre:                called before 'all' target
-#     .all-post:               called after 'all' target
-#     .help-pre:               called before 'help' target
-#     .help-post:              called after 'help' target
-#
-#  Targets beginning with '.' are not intended to be called on their own.
-#
-#  Main targets can be executed directly, and they are:
-#  
-#     build                    build a specific configuration
-#     clean                    remove built files from a configuration
-#     clobber                  remove all built files
-#     all                      build all configurations
-#     help                     print help mesage
-#  
-#  Targets .build-impl, .clean-impl, .clobber-impl, .all-impl, and
-#  .help-impl are implemented in nbproject/makefile-impl.mk.
-#
-#  Available make variables:
-#
-#     CND_BASEDIR                base directory for relative paths
-#     CND_DISTDIR                default top distribution directory (build artifacts)
-#     CND_BUILDDIR               default top build directory (object files, ...)
-#     CONF                       name of current configuration
-#     CND_PLATFORM_${CONF}       platform name (current configuration)
-#     CND_ARTIFACT_DIR_${CONF}   directory of build artifact (current configuration)
-#     CND_ARTIFACT_NAME_${CONF}  name of build artifact (current configuration)
-#     CND_ARTIFACT_PATH_${CONF}  path to build artifact (current configuration)
-#     CND_PACKAGE_DIR_${CONF}    directory of package (current configuration)
-#     CND_PACKAGE_NAME_${CONF}   name of package (current configuration)
-#     CND_PACKAGE_PATH_${CONF}   path to package (current configuration)
-#
-# NOCDDL
+ #Copyright (C) 2014  Cagdas Caglak http://expcodes.blogspot.com.tr/
 
+ #This program is free software: you can redistribute it and/or modify
+ #it under the terms of the GNU General Public License as published by
+ #the Free Software Foundation, either version 3 of the License, or
+ #(at your option) any later version.
 
-# Environment 
-MKDIR=mkdir
-CP=cp
-CCADMIN=CCadmin
+ #This program is distributed in the hope that it will be useful,
+ #but WITHOUT ANY WARRANTY; without even the implied warranty of
+ #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ #GNU General Public License for more details.
 
+ #You should have received a copy of the GNU General Public License
+ #along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+EXEC_ARDUINO=TestArduino
+EXEC_MPU6050=TestMpu6050
+CXX=arm-none-linux-gnueabi-g++
+CFLAGS=-Wall -c
 
-# build
-build: .build-post
+all: $(EXEC_ARDUINO) $(EXEC_MPU6050)
+	mkdir obj
+	mv *.o obj
 
-.build-pre:
-# Add your pre 'build' code here...
+$(EXEC_ARDUINO): TestArduino.o BBB_I2C.o
+	$(CXX) TestArduino.o BBB_I2C.o -o $(EXEC_ARDUINO)
 
-.build-post: .build-impl
-# Add your post 'build' code here...
+$(EXEC_MPU6050): TestMpu6050.o BBB_I2C.o MPU6050.o
+	$(CXX) TestMpu6050.o BBB_I2C.o MPU6050.o -o $(EXEC_MPU6050)
 
+TestArduino.o: TestArduino.cpp
+	$(CXX) $(CFLAGS) TestArduino.cpp
 
-# clean
-clean: .clean-post
+TestMpu6050.o: TestMpu6050.cpp
+	$(CXX) $(CFLAGS) TestMpu6050.cpp
 
-.clean-pre:
-# Add your pre 'clean' code here...
+BBB_I2C.o: BBB_I2C.cpp
+	$(CXX) $(CFLAGS) BBB_I2C.cpp
 
-.clean-post: .clean-impl
-# Add your post 'clean' code here...
+MPU6050.o: MPU6050.cpp
+	$(CXX) $(CFLAGS) MPU6050.cpp
 
-
-# clobber
-clobber: .clobber-post
-
-.clobber-pre:
-# Add your pre 'clobber' code here...
-
-.clobber-post: .clobber-impl
-# Add your post 'clobber' code here...
-
-
-# all
-all: .all-post
-
-.all-pre:
-# Add your pre 'all' code here...
-
-.all-post: .all-impl
-# Add your post 'all' code here...
-
-
-# build tests
-build-tests: .build-tests-post
-
-.build-tests-pre:
-# Add your pre 'build-tests' code here...
-
-.build-tests-post: .build-tests-impl
-# Add your post 'build-tests' code here...
-
-
-# run tests
-test: .test-post
-
-.test-pre: build-tests
-# Add your pre 'test' code here...
-
-.test-post: .test-impl
-# Add your post 'test' code here...
-
-
-# help
-help: .help-post
-
-.help-pre:
-# Add your pre 'help' code here...
-
-.help-post: .help-impl
-# Add your post 'help' code here...
-
-
-
-# include project implementation makefile
-include nbproject/Makefile-impl.mk
-
-# include project make variables
-include nbproject/Makefile-variables.mk
+clean:
+	rm -rf *.o $(EXEC_ARDUINO) $(EXEC_MPU6050) obj

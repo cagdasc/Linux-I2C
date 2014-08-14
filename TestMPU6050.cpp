@@ -17,6 +17,9 @@
 #include <stdio.h>
 #include "MPU6050.h"
 
+using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_mpu6050;
+
 int main() {
 
 	// First way
