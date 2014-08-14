@@ -7,6 +7,13 @@ This library is about I2C communication for BeagleBone Black. It tested on Ubunt
 This library has specific methods for Arduino. You can communicate with Arduino easily.
 Some methods have "NoExit" suffix. This means if there is an error accour while reading or writing, the connection doesn't terminated.
 
+#Usage
+    make clean
+    make all
+    ./TestMpu6050
+    or
+    ./TestArduino
+
 #License
 
 	Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
