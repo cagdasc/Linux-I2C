@@ -3,7 +3,10 @@ BeagleBoneBlack-I2C
 
 BeagleBone Black I2C Library
 
-This library is about I2C communication for BeagleBone Black. It tested on Ubuntu 14.04 and for fine. It has some functions to work with Arduino UNO R3. I working on MPU6050, ADXL345, HMC5883L chip for implement I2C library. You can find MPU6050 test example. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
+This library is about I2C communication for BeagleBone Black. It tested on Ubuntu 14.04 and work fine. It has some functions to work with Arduino UNO R3. I am working on MPU6050, ADXL345, HMC5883L chip for implement I2C library. You can find Arduino and MPU6050 test example. I2C library is experimental so there is no warranty. It's basic and I am working for developing. If there is a some problem or some additional for this library, you can share me.
+
+While I write this library, I inpired from [i2cdevlib](https://github.com/jrowberg/i2cdevlib) library.
+
 This library has specific methods for Arduino. You can communicate with Arduino easily.
 Some methods have "NoExit" suffix. This means if there is an error accour while reading or writing, the connection doesn't terminated.
 

@@ -15,30 +15,33 @@
  
 EXEC_ARDUINO=TestArduino
 EXEC_MPU6050=TestMpu6050
-CXX=arm-none-linux-gnueabi-g++
+CXX=g++
 CFLAGS=-Wall -c
 
 all: $(EXEC_ARDUINO) $(EXEC_MPU6050)
-	mkdir obj
-	mv *.o obj
+	@mkdir -p obj
+	@mv *.o obj
 
 $(EXEC_ARDUINO): TestArduino.o BBB_I2C.o
-	$(CXX) TestArduino.o BBB_I2C.o -o $(EXEC_ARDUINO)
+	@echo "Arduino executable creating..."
+	@$(CXX) TestArduino.o BBB_I2C.o -o $(EXEC_ARDUINO)
 
 $(EXEC_MPU6050): TestMpu6050.o BBB_I2C.o MPU6050.o
-	$(CXX) TestMpu6050.o BBB_I2C.o MPU6050.o -o $(EXEC_MPU6050)
+	@echo "Mpu6050 executable creating..."
+	@$(CXX) TestMpu6050.o BBB_I2C.o MPU6050.o -o $(EXEC_MPU6050)
 
 TestArduino.o: TestArduino.cpp
-	$(CXX) $(CFLAGS) TestArduino.cpp
+	@$(CXX) $(CFLAGS) TestArduino.cpp
 
 TestMpu6050.o: TestMpu6050.cpp
-	$(CXX) $(CFLAGS) TestMpu6050.cpp
+	@$(CXX) $(CFLAGS) TestMpu6050.cpp
 
 BBB_I2C.o: BBB_I2C.cpp
-	$(CXX) $(CFLAGS) BBB_I2C.cpp
+	@$(CXX) $(CFLAGS) BBB_I2C.cpp
 
 MPU6050.o: MPU6050.cpp
-	$(CXX) $(CFLAGS) MPU6050.cpp
+	@$(CXX) $(CFLAGS) MPU6050.cpp
 
 clean:
-	rm -rf *.o $(EXEC_ARDUINO) $(EXEC_MPU6050) obj
+	@echo "Clean."
+	@rm -rf *.o $(EXEC_ARDUINO) $(EXEC_MPU6050) obj

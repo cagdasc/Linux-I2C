@@ -82,5 +82,5 @@ Temporary Items
 *.out
 *.app
 
-/Debug/
-/Release/
+Debug/
+Release/
