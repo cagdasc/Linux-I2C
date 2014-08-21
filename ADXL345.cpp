@@ -20,152 +20,163 @@ using namespace cacaosd_bbb_i2c;
 
 namespace cacaosd_adxl345 {
 
-ADXL345::ADXL345() :
-		i2c(1) {
+ADXL345::ADXL345(uint8_t DEV_ADD) :
+		i2c(DEV_ADD, I2C_BUS) {
+	this->DEV_ADD = DEV_ADD;
 }
 
-ADXL345::ADXL345(BBB_I2C &i2c) {
+ADXL345::ADXL345(BBB_I2C &i2c) :
+		DEV_ADD(ADXL345_DEFAULT_ADDRESS) {
 	this->i2c = i2c;
+	this->i2c.setDEV_ADD(DEV_ADD);
 }
 
 ADXL345::~ADXL345() {
 }
 
+void ADXL345::setDeviceAddress(uint8_t DEV_ADD) {
+	this->DEV_ADD = DEV_ADD;
+}
+
+uint8_t ADXL345::getDeviceAddress() {
+	return this->DEV_ADD;
+}
+
 void ADXL345::initialize() {
-	i2c.writeByteNoExit(ADXL345_RA_POWER_CTL, 0);
+	i2c.writeByte(ADXL345_RA_POWER_CTL, 0);
 	setAutoSleepEnabled(true);
 	setMeasureEnabled(true);
 }
 
 uint8_t ADXL345::getDeviceID() {
-	return i2c.readByteNoExit(ADXL345_RA_DEVID);
+	return i2c.readByte(ADXL345_RA_DEVID);
 }
 
 uint8_t ADXL345::getTapThreshold() {
-	return i2c.readByteNoExit(ADXL345_RA_THRESH_TAP);
+	return i2c.readByte(ADXL345_RA_THRESH_TAP);
 }
 
 void ADXL345::setTapThreshold(uint8_t threshold) {
-	i2c.writeByteNoExit(ADXL345_RA_THRESH_TAP, threshold);
+	i2c.writeByte(ADXL345_RA_THRESH_TAP, threshold);
 }
 
 void ADXL345::setOffset(int8_t x, int8_t y, int8_t z) {
-	i2c.writeByteNoExit(ADXL345_RA_OFSX, x);
-	i2c.writeByteNoExit(ADXL345_RA_OFSY, y);
-	i2c.writeByteNoExit(ADXL345_RA_OFSZ, z);
+	i2c.writeByte(ADXL345_RA_OFSX, x);
+	i2c.writeByte(ADXL345_RA_OFSY, y);
+	i2c.writeByte(ADXL345_RA_OFSZ, z);
 }
 
 int8_t ADXL345::getOffsetX() {
-	return i2c.readByteNoExit(ADXL345_RA_OFSX);
+	return i2c.readByte(ADXL345_RA_OFSX);
 }
 
 void ADXL345::setOffsetX(int8_t x) {
-	i2c.writeByteNoExit(ADXL345_RA_OFSX, x);
+	i2c.writeByte(ADXL345_RA_OFSX, x);
 }
 
 int8_t ADXL345::getOffsetY() {
-	return i2c.readByteNoExit(ADXL345_RA_OFSY);
+	return i2c.readByte(ADXL345_RA_OFSY);
 }
 
 void ADXL345::setOffsetY(int8_t y) {
-	i2c.writeByteNoExit(ADXL345_RA_OFSY, y);
+	i2c.writeByte(ADXL345_RA_OFSY, y);
 }
 
 int8_t ADXL345::getOffsetZ() {
-	return i2c.readByteNoExit(ADXL345_RA_OFSZ);
+	return i2c.readByte(ADXL345_RA_OFSZ);
 }
 
 void ADXL345::setOffsetZ(int8_t z) {
-	i2c.writeByteNoExit(ADXL345_RA_OFSZ, z);
+	i2c.writeByte(ADXL345_RA_OFSZ, z);
 }
 
 uint8_t ADXL345::getTapDuration() {
-	return i2c.readByteNoExit(ADXL345_RA_DUR);
+	return i2c.readByte(ADXL345_RA_DUR);
 }
 
 void ADXL345::setTapDuration(uint8_t duration) {
-	i2c.writeByteNoExit(ADXL345_RA_DUR, duration);
+	i2c.writeByte(ADXL345_RA_DUR, duration);
 }
 
 uint8_t ADXL345::getDoubleTapLatency() {
-	return i2c.readByteNoExit(ADXL345_RA_LATENT);
+	return i2c.readByte(ADXL345_RA_LATENT);
 }
 
 void ADXL345::setDoubleTapLatency(uint8_t latency) {
-	i2c.writeByteNoExit(ADXL345_RA_LATENT, latency);
+	i2c.writeByte(ADXL345_RA_LATENT, latency);
 }
 
 uint8_t ADXL345::getDoubleTapWindow() {
-	return i2c.readByteNoExit(ADXL345_RA_WINDOW);
+	return i2c.readByte(ADXL345_RA_WINDOW);
 }
 
 void ADXL345::setDoubleTapWindow(uint8_t window) {
-	i2c.writeByteNoExit(ADXL345_RA_WINDOW, window);
+	i2c.writeByte(ADXL345_RA_WINDOW, window);
 }
 
 uint8_t ADXL345::getActivityThreshold() {
-	return i2c.readByteNoExit(ADXL345_RA_THRESH_ACT);
+	return i2c.readByte(ADXL345_RA_THRESH_ACT);
 }
 
 void ADXL345::setActivityThreshold(uint8_t threshold) {
-	i2c.writeByteNoExit(ADXL345_RA_THRESH_ACT, threshold);
+	i2c.writeByte(ADXL345_RA_THRESH_ACT, threshold);
 }
 
 uint8_t ADXL345::getInactivityThreshold() {
-	return i2c.readByteNoExit(ADXL345_RA_THRESH_INACT);
+	return i2c.readByte(ADXL345_RA_THRESH_INACT);
 }
 
 void ADXL345::setInactivityThreshold(uint8_t threshold) {
-	i2c.writeByteNoExit(ADXL345_RA_THRESH_INACT, threshold);
+	i2c.writeByte(ADXL345_RA_THRESH_INACT, threshold);
 }
 
 uint8_t ADXL345::getInactivityTime() {
-	return i2c.readByteNoExit(ADXL345_RA_TIME_INACT);
+	return i2c.readByte(ADXL345_RA_TIME_INACT);
 }
 
 void ADXL345::setInactivityTime(uint8_t time) {
-	i2c.writeByteNoExit(ADXL345_RA_TIME_INACT, time);
+	i2c.writeByte(ADXL345_RA_TIME_INACT, time);
 }
 
 bool ADXL345::getActivityAC() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_AC_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_AC_BIT);
 }
 
 void ADXL345::setActivityAC(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_ACT_AC_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_ACT_AC_BIT);
 }
 
 bool ADXL345::getActivityXEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_X_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_X_BIT);
 }
 
 void ADXL345::setActivityXEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_ACT_X_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_ACT_X_BIT);
 }
 
 bool ADXL345::getActivityYEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Y_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Y_BIT);
 }
 
 void ADXL345::setActivityYEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_ACT_Y_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_ACT_Y_BIT);
 
 }
 
 bool ADXL345::getActivityZEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Z_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Z_BIT);
 }
 
 void ADXL345::setActivityZEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_ACT_Z_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_ACT_Z_BIT);
 }
 
 bool ADXL345::getInactivityAC() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_AC_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_AC_BIT);
 }
 
 /** Set inctivity AC/DC coupling.
@@ -175,8 +186,8 @@ bool ADXL345::getInactivityAC() {
  * @see ADXL345_AIC_INACT_AC_BIT
  */
 void ADXL345::setInactivityAC(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_INACT_AC_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_INACT_AC_BIT);
 }
 
 /** Get X axis inactivity monitoring.
@@ -187,7 +198,7 @@ void ADXL345::setInactivityAC(bool enabled) {
  * @see ADXL345_AIC_INACT_X_BIT
  */
 bool ADXL345::getInactivityXEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_X_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_X_BIT);
 }
 
 /** Set X axis activity monitoring inclusion.
@@ -198,8 +209,8 @@ bool ADXL345::getInactivityXEnabled() {
  * @see ADXL345_AIC_INACT_X_BIT
  */
 void ADXL345::setInactivityXEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_INACT_X_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_INACT_X_BIT);
 }
 
 /** Get Y axis inactivity monitoring.
@@ -210,7 +221,7 @@ void ADXL345::setInactivityXEnabled(bool enabled) {
  * @see ADXL345_AIC_INACT_Y_BIT
  */
 bool ADXL345::getInactivityYEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_Y_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_Y_BIT);
 }
 
 /** Set Y axis inactivity monitoring inclusion.
@@ -221,8 +232,8 @@ bool ADXL345::getInactivityYEnabled() {
  * @see ADXL345_AIC_INACT_Y_BIT
  */
 void ADXL345::setInactivityYEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_INACT_Y_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_INACT_Y_BIT);
 }
 
 /** Get Z axis inactivity monitoring.
@@ -233,7 +244,7 @@ void ADXL345::setInactivityYEnabled(bool enabled) {
  * @see ADXL345_AIC_INACT_Z_BIT
  */
 bool ADXL345::getInactivityZEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_Z_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_Z_BIT);
 }
 
 /** Set Z axis inactivity monitoring inclusion.
@@ -244,8 +255,8 @@ bool ADXL345::getInactivityZEnabled() {
  * @see ADXL345_AIC_INACT_Z_BIT
  */
 void ADXL345::setInactivityZEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_ACT_INACT_CTL, enabled,
-			ADXL345_AIC_INACT_Z_BIT);
+	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
+	ADXL345_AIC_INACT_Z_BIT);
 }
 
 // THRESH_FF register
@@ -261,7 +272,7 @@ void ADXL345::setInactivityZEnabled(bool enabled) {
  * @see ADXL345_RA_THRESH_FF
  */
 uint8_t ADXL345::getFreefallThreshold() {
-	return i2c.readByteNoExit(ADXL345_AIC_INACT_Z_BIT);
+	return i2c.readByte(ADXL345_AIC_INACT_Z_BIT);
 }
 
 /** Set freefall threshold value.
@@ -270,7 +281,7 @@ uint8_t ADXL345::getFreefallThreshold() {
  * @see ADXL345_RA_THRESH_FF
  */
 void ADXL345::setFreefallThreshold(uint8_t threshold) {
-	i2c.writeByteNoExit(ADXL345_RA_THRESH_FF, threshold);
+	i2c.writeByte(ADXL345_RA_THRESH_FF, threshold);
 }
 
 // TIME_FF register
@@ -286,7 +297,7 @@ void ADXL345::setFreefallThreshold(uint8_t threshold) {
  * @see ADXL345_RA_TIME_FF
  */
 uint8_t ADXL345::getFreefallTime() {
-	return i2c.readByteNoExit(ADXL345_RA_TIME_FF);
+	return i2c.readByte(ADXL345_RA_TIME_FF);
 }
 
 /** Set freefall time value.
@@ -295,7 +306,7 @@ uint8_t ADXL345::getFreefallTime() {
  * @see ADXL345_RA_TIME_FF
  */
 void ADXL345::setFreefallTime(uint8_t time) {
-	i2c.writeByteNoExit(ADXL345_RA_TIME_FF, time);
+	i2c.writeByte(ADXL345_RA_TIME_FF, time);
 }
 
 // TAP_AXES register
@@ -310,7 +321,7 @@ void ADXL345::setFreefallTime(uint8_t time) {
  * @see ADXL345_TAPAXIS_SUP_BIT
  */
 bool ADXL345::getTapAxisSuppress() {
-	return i2c.readBitNoExit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_SUP_BIT);
+	return i2c.readBit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_SUP_BIT);
 }
 
 /** Set double-tap fast-movement suppression.
@@ -320,7 +331,7 @@ bool ADXL345::getTapAxisSuppress() {
  * @see ADXL345_TAPAXIS_SUP_BIT
  */
 void ADXL345::setTapAxisSuppress(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_SUP_BIT);
+	i2c.writeBit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_SUP_BIT);
 }
 
 /** Get double-tap fast-movement suppression.
@@ -333,7 +344,7 @@ void ADXL345::setTapAxisSuppress(bool enabled) {
  * @see ADXL345_TAPAXIS_X_BIT
  */
 bool ADXL345::getTapAxisXEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_X_BIT);
+	return i2c.readBit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_X_BIT);
 }
 
 /** Set tap detection X axis inclusion.
@@ -343,7 +354,7 @@ bool ADXL345::getTapAxisXEnabled() {
  * @see ADXL345_TAPAXIS_X_BIT
  */
 void ADXL345::setTapAxisXEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_X_BIT);
+	i2c.writeBit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_X_BIT);
 }
 
 /** Get tap detection Y axis inclusion.
@@ -356,7 +367,7 @@ void ADXL345::setTapAxisXEnabled(bool enabled) {
  * @see ADXL345_TAPAXIS_Y_BIT
  */
 bool ADXL345::getTapAxisYEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_Y_BIT);
+	return i2c.readBit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_Y_BIT);
 }
 
 /** Set tap detection Y axis inclusion.
@@ -366,7 +377,7 @@ bool ADXL345::getTapAxisYEnabled() {
  * @see ADXL345_TAPAXIS_Y_BIT
  */
 void ADXL345::setTapAxisYEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_Y_BIT);
+	i2c.writeBit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_Y_BIT);
 }
 
 /** Get tap detection Z axis inclusion.
@@ -379,7 +390,7 @@ void ADXL345::setTapAxisYEnabled(bool enabled) {
  * @see ADXL345_TAPAXIS_Z_BIT
  */
 bool ADXL345::getTapAxisZEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_Z_BIT);
+	return i2c.readBit(ADXL345_RA_TAP_AXES, ADXL345_TAPAXIS_Z_BIT);
 }
 
 /** Set tap detection Z axis inclusion.
@@ -389,7 +400,7 @@ bool ADXL345::getTapAxisZEnabled() {
  * @see ADXL345_TAPAXIS_Z_BIT
  */
 void ADXL345::setTapAxisZEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_Z_BIT);
+	i2c.writeBit(ADXL345_RA_TAP_AXES, enabled, ADXL345_TAPAXIS_Z_BIT);
 }
 
 // ACT_TAP_STATUS register
@@ -407,8 +418,8 @@ void ADXL345::setTapAxisZEnabled(bool enabled) {
  * @see ADXL345_TAPSTAT_ACTX_BIT
  */
 bool ADXL345::getActivitySourceX() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_ACTX_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_ACTX_BIT);
 }
 
 /** Get Y axis activity source flag.
@@ -418,8 +429,8 @@ bool ADXL345::getActivitySourceX() {
  * @see ADXL345_TAPSTAT_ACTY_BIT
  */
 bool ADXL345::getActivitySourceY() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_ACTY_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_ACTY_BIT);
 }
 
 /** Get Z axis activity source flag.
@@ -429,8 +440,8 @@ bool ADXL345::getActivitySourceY() {
  * @see ADXL345_TAPSTAT_ACTZ_BIT
  */
 bool ADXL345::getActivitySourceZ() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_ACTZ_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_ACTZ_BIT);
 }
 
 /** Get sleep mode flag.
@@ -443,8 +454,8 @@ bool ADXL345::getActivitySourceZ() {
  * @see ADXL345_TAPSTAT_ASLEEP_BIT
  */
 bool ADXL345::getAsleep() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_ASLEEP_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_ASLEEP_BIT);
 }
 
 /** Get X axis tap source flag.
@@ -454,8 +465,8 @@ bool ADXL345::getAsleep() {
  * @see ADXL345_TAPSTAT_TAPX_BIT
  */
 bool ADXL345::getTapSourceX() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_TAPX_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_TAPX_BIT);
 }
 
 /** Get Y axis tap source flag.
@@ -465,8 +476,8 @@ bool ADXL345::getTapSourceX() {
  * @see ADXL345_TAPSTAT_TAPY_BIT
  */
 bool ADXL345::getTapSourceY() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_TAPY_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_TAPY_BIT);
 }
 
 /** Get Z axis tap source flag.
@@ -476,8 +487,8 @@ bool ADXL345::getTapSourceY() {
  * @see ADXL345_TAPSTAT_TAPZ_BIT
  */
 bool ADXL345::getTapSourceZ() {
-	return i2c.readBitNoExit(ADXL345_RA_ACT_TAP_STATUS,
-			ADXL345_TAPSTAT_TAPZ_BIT);
+	return i2c.readBit(ADXL345_RA_ACT_TAP_STATUS,
+	ADXL345_TAPSTAT_TAPZ_BIT);
 }
 
 // BW_RATE register
@@ -491,7 +502,7 @@ bool ADXL345::getTapSourceZ() {
  * @see ADXL345_BW_LOWPOWER_BIT
  */
 bool ADXL345::getLowPowerEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_BW_RATE, ADXL345_BW_LOWPOWER_BIT);
+	return i2c.readBit(ADXL345_RA_BW_RATE, ADXL345_BW_LOWPOWER_BIT);
 }
 
 /** Set low power enabled status.
@@ -501,7 +512,7 @@ bool ADXL345::getLowPowerEnabled() {
  * @see ADXL345_BW_LOWPOWER_BIT
  */
 void ADXL345::setLowPowerEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_BW_RATE, enabled, ADXL345_BW_LOWPOWER_BIT);
+	i2c.writeBit(ADXL345_RA_BW_RATE, enabled, ADXL345_BW_LOWPOWER_BIT);
 }
 
 /** Get measurement data rate.
@@ -517,8 +528,8 @@ void ADXL345::setLowPowerEnabled(bool enabled) {
  * @see ADXL345_BW_RATE_LENGTH
  */
 uint8_t ADXL345::getRate() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_BW_RATE, ADXL345_BW_RATE_LENGTH,
-			ADXL345_BW_LOWPOWER_BIT);
+	return i2c.readMoreBits(ADXL345_RA_BW_RATE, ADXL345_BW_RATE_LENGTH,
+	ADXL345_BW_LOWPOWER_BIT);
 }
 
 /** Set measurement data rate.
@@ -533,8 +544,8 @@ uint8_t ADXL345::getRate() {
  * @see ADXL345_BW_RATE_LENGTH
  */
 void ADXL345::setRate(uint8_t rate) {
-	i2c.writeMoreBitsNoExit(ADXL345_RA_BW_RATE, rate, ADXL345_BW_RATE_LENGTH,
-			ADXL345_BW_LOWPOWER_BIT);
+	i2c.writeMoreBits(ADXL345_RA_BW_RATE, rate, ADXL345_BW_RATE_LENGTH,
+	ADXL345_BW_LOWPOWER_BIT);
 }
 
 // POWER_CTL register
@@ -560,7 +571,7 @@ void ADXL345::setRate(uint8_t rate) {
  * @see ADXL345_PCTL_LINK_BIT
  */
 bool ADXL345::getLinkEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_LINK_BIT);
+	return i2c.readBit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_LINK_BIT);
 }
 
 /** Set activity/inactivity serial linkage status.
@@ -569,7 +580,7 @@ bool ADXL345::getLinkEnabled() {
  * @see ADXL345_PCTL_LINK_BIT
  */
 void ADXL345::setLinkEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_LINK_BIT);
+	i2c.writeBit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_LINK_BIT);
 
 }
 
@@ -605,7 +616,7 @@ void ADXL345::setLinkEnabled(bool enabled) {
  * @see ADXL345_PCTL_AUTOSLEEP_BIT
  */
 bool ADXL345::getAutoSleepEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_AUTOSLEEP_BIT);
+	return i2c.readBit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_AUTOSLEEP_BIT);
 }
 
 /** Set auto-sleep enabled status.
@@ -615,8 +626,8 @@ bool ADXL345::getAutoSleepEnabled() {
  * @see ADXL345_PCTL_AUTOSLEEP_BIT
  */
 void ADXL345::setAutoSleepEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_POWER_CTL, enabled,
-			ADXL345_PCTL_AUTOSLEEP_BIT);
+	i2c.writeBit(ADXL345_RA_POWER_CTL, enabled,
+	ADXL345_PCTL_AUTOSLEEP_BIT);
 }
 
 /** Get measurement enabled status.
@@ -628,7 +639,7 @@ void ADXL345::setAutoSleepEnabled(bool enabled) {
  * @see ADXL345_PCTL_MEASURE_BIT
  */
 bool ADXL345::getMeasureEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_MEASURE_BIT);
+	return i2c.readBit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_MEASURE_BIT);
 }
 
 /** Set measurement enabled status.
@@ -638,7 +649,7 @@ bool ADXL345::getMeasureEnabled() {
  * @see ADXL345_PCTL_MEASURE_BIT
  */
 void ADXL345::setMeasureEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_MEASURE_BIT);
+	i2c.writeBit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_MEASURE_BIT);
 }
 
 /** Get sleep mode enabled status.
@@ -662,7 +673,7 @@ void ADXL345::setMeasureEnabled(bool enabled) {
  * @see ADXL345_PCTL_SLEEP_BIT
  */
 bool ADXL345::getSleepEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_SLEEP_BIT);
+	return i2c.readBit(ADXL345_RA_POWER_CTL, ADXL345_PCTL_SLEEP_BIT);
 }
 
 /** Set sleep mode enabled status.
@@ -672,7 +683,7 @@ bool ADXL345::getSleepEnabled() {
  * @see ADXL345_PCTL_SLEEP_BIT
  */
 void ADXL345::setSleepEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_SLEEP_BIT);
+	i2c.writeBit(ADXL345_RA_POWER_CTL, enabled, ADXL345_PCTL_SLEEP_BIT);
 
 }
 
@@ -684,8 +695,8 @@ void ADXL345::setSleepEnabled(bool enabled) {
  * @see ADXL345_PCTL_SLEEP_BIT
  */
 uint8_t ADXL345::getWakeupFrequency() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_POWER_CTL,
-			ADXL345_PCTL_WAKEUP_LENGTH, ADXL345_PCTL_WAKEUP_BIT);
+	return i2c.readMoreBits(ADXL345_RA_POWER_CTL,
+	ADXL345_PCTL_WAKEUP_LENGTH, ADXL345_PCTL_WAKEUP_BIT);
 }
 
 /** Set wakeup frequency.
@@ -695,8 +706,8 @@ uint8_t ADXL345::getWakeupFrequency() {
  * @see ADXL345_PCTL_SLEEP_BIT
  */
 void ADXL345::setWakeupFrequency(uint8_t frequency) {
-	i2c.writeMoreBitsNoExit(ADXL345_RA_POWER_CTL, frequency,
-			ADXL345_PCTL_WAKEUP_LENGTH, ADXL345_PCTL_WAKEUP_BIT);
+	i2c.writeMoreBits(ADXL345_RA_POWER_CTL, frequency,
+	ADXL345_PCTL_WAKEUP_LENGTH, ADXL345_PCTL_WAKEUP_BIT);
 }
 
 // INT_ENABLE register
@@ -712,7 +723,7 @@ void ADXL345::setWakeupFrequency(uint8_t frequency) {
  * @see ADXL345_INT_DATA_READY_BIT
  */
 bool ADXL345::getIntDataReadyEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_DATA_READY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_DATA_READY_BIT);
 }
 
 /** Set DATA_READY interrupt enabled status.
@@ -722,8 +733,8 @@ bool ADXL345::getIntDataReadyEnabled() {
  * @see ADXL345_INT_DATA_READY_BIT
  */
 void ADXL345::setIntDataReadyEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_DATA_READY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_DATA_READY_BIT);
 }
 
 /** Set SINGLE_TAP interrupt enabled status.
@@ -733,7 +744,7 @@ void ADXL345::setIntDataReadyEnabled(bool enabled) {
  * @see ADXL345_INT_SINGLE_TAP_BIT
  */
 bool ADXL345::getIntSingleTapEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_SINGLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_SINGLE_TAP_BIT);
 }
 
 /** Set SINGLE_TAP interrupt enabled status.
@@ -743,8 +754,8 @@ bool ADXL345::getIntSingleTapEnabled() {
  * @see ADXL345_INT_SINGLE_TAP_BIT
  */
 void ADXL345::setIntSingleTapEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_SINGLE_TAP_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_SINGLE_TAP_BIT);
 }
 
 /** Get DOUBLE_TAP interrupt enabled status.
@@ -754,7 +765,7 @@ void ADXL345::setIntSingleTapEnabled(bool enabled) {
  * @see ADXL345_INT_DOUBLE_TAP_BIT
  */
 bool ADXL345::getIntDoubleTapEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_DOUBLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_DOUBLE_TAP_BIT);
 }
 
 /** Set DOUBLE_TAP interrupt enabled status.
@@ -764,8 +775,8 @@ bool ADXL345::getIntDoubleTapEnabled() {
  * @see ADXL345_INT_DOUBLE_TAP_BIT
  */
 void ADXL345::setIntDoubleTapEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_DOUBLE_TAP_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_DOUBLE_TAP_BIT);
 }
 
 /** Set ACTIVITY interrupt enabled status.
@@ -775,7 +786,7 @@ void ADXL345::setIntDoubleTapEnabled(bool enabled) {
  * @see ADXL345_INT_ACTIVITY_BIT
  */
 bool ADXL345::getIntActivityEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_ACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_ACTIVITY_BIT);
 }
 
 /** Set ACTIVITY interrupt enabled status.
@@ -785,8 +796,8 @@ bool ADXL345::getIntActivityEnabled() {
  * @see ADXL345_INT_ACTIVITY_BIT
  */
 void ADXL345::setIntActivityEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_ACTIVITY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_ACTIVITY_BIT);
 }
 
 /** Get INACTIVITY interrupt enabled status.
@@ -796,7 +807,7 @@ void ADXL345::setIntActivityEnabled(bool enabled) {
  * @see ADXL345_INT_INACTIVITY_BIT
  */
 bool ADXL345::getIntInactivityEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_INACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_INACTIVITY_BIT);
 }
 
 /** Set INACTIVITY interrupt enabled status.
@@ -806,8 +817,8 @@ bool ADXL345::getIntInactivityEnabled() {
  * @see ADXL345_INT_INACTIVITY_BIT
  */
 void ADXL345::setIntInactivityEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_INACTIVITY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_INACTIVITY_BIT);
 }
 
 /** Get FREE_FALL interrupt enabled status.
@@ -817,7 +828,7 @@ void ADXL345::setIntInactivityEnabled(bool enabled) {
  * @see ADXL345_INT_FREE_FALL_BIT
  */
 bool ADXL345::getIntFreefallEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_FREE_FALL_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_FREE_FALL_BIT);
 }
 
 /** Set FREE_FALL interrupt enabled status.
@@ -827,8 +838,8 @@ bool ADXL345::getIntFreefallEnabled() {
  * @see ADXL345_INT_FREE_FALL_BIT
  */
 void ADXL345::setIntFreefallEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_FREE_FALL_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_FREE_FALL_BIT);
 }
 
 /** Get WATERMARK interrupt enabled status.
@@ -838,7 +849,7 @@ void ADXL345::setIntFreefallEnabled(bool enabled) {
  * @see ADXL345_INT_WATERMARK_BIT
  */
 bool ADXL345::getIntWatermarkEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_WATERMARK_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_WATERMARK_BIT);
 }
 
 /** Set WATERMARK interrupt enabled status.
@@ -848,8 +859,8 @@ bool ADXL345::getIntWatermarkEnabled() {
  * @see ADXL345_INT_WATERMARK_BIT
  */
 void ADXL345::setIntWatermarkEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled,
-			ADXL345_INT_WATERMARK_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled,
+	ADXL345_INT_WATERMARK_BIT);
 }
 
 /** Get OVERRUN interrupt enabled status.
@@ -859,7 +870,7 @@ void ADXL345::setIntWatermarkEnabled(bool enabled) {
  * @see ADXL345_INT_OVERRUN_BIT
  */
 bool ADXL345::getIntOverrunEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_ENABLE, ADXL345_INT_OVERRUN_BIT);
+	return i2c.readBit(ADXL345_RA_INT_ENABLE, ADXL345_INT_OVERRUN_BIT);
 }
 
 /** Set OVERRUN interrupt enabled status.
@@ -869,7 +880,7 @@ bool ADXL345::getIntOverrunEnabled() {
  * @see ADXL345_INT_OVERRUN_BIT
  */
 void ADXL345::setIntOverrunEnabled(bool enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_ENABLE, enabled, ADXL345_INT_OVERRUN_BIT);
+	i2c.writeBit(ADXL345_RA_INT_ENABLE, enabled, ADXL345_INT_OVERRUN_BIT);
 }
 
 // INT_MAP register
@@ -883,7 +894,7 @@ void ADXL345::setIntOverrunEnabled(bool enabled) {
  * @see ADXL345_INT_DATA_READY_BIT
  */
 uint8_t ADXL345::getIntDataReadyPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_DATA_READY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_DATA_READY_BIT);
 }
 
 /** Set DATA_READY interrupt pin.
@@ -893,7 +904,7 @@ uint8_t ADXL345::getIntDataReadyPin() {
  * @see ADXL345_INT_DATA_READY_BIT
  */
 void ADXL345::setIntDataReadyPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_DATA_READY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_DATA_READY_BIT);
 }
 
 /** Get SINGLE_TAP interrupt pin.
@@ -903,7 +914,7 @@ void ADXL345::setIntDataReadyPin(uint8_t pin) {
  * @see ADXL345_INT_SINGLE_TAP_BIT
  */
 uint8_t ADXL345::getIntSingleTapPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_SINGLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_SINGLE_TAP_BIT);
 }
 
 /** Set SINGLE_TAP interrupt pin.
@@ -913,7 +924,7 @@ uint8_t ADXL345::getIntSingleTapPin() {
  * @see ADXL345_INT_SINGLE_TAP_BIT
  */
 void ADXL345::setIntSingleTapPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_SINGLE_TAP_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_SINGLE_TAP_BIT);
 }
 
 /** Get DOUBLE_TAP interrupt pin.
@@ -923,7 +934,7 @@ void ADXL345::setIntSingleTapPin(uint8_t pin) {
  * @see ADXL345_INT_DOUBLE_TAP_BIT
  */
 uint8_t ADXL345::getIntDoubleTapPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_DOUBLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_DOUBLE_TAP_BIT);
 }
 
 /** Set DOUBLE_TAP interrupt pin.
@@ -933,7 +944,7 @@ uint8_t ADXL345::getIntDoubleTapPin() {
  * @see ADXL345_INT_DOUBLE_TAP_BIT
  */
 void ADXL345::setIntDoubleTapPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_DOUBLE_TAP_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_DOUBLE_TAP_BIT);
 }
 
 /** Get ACTIVITY interrupt pin.
@@ -943,7 +954,7 @@ void ADXL345::setIntDoubleTapPin(uint8_t pin) {
  * @see ADXL345_INT_ACTIVITY_BIT
  */
 uint8_t ADXL345::getIntActivityPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_ACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_ACTIVITY_BIT);
 }
 
 /** Set ACTIVITY interrupt pin.
@@ -953,7 +964,7 @@ uint8_t ADXL345::getIntActivityPin() {
  * @see ADXL345_INT_ACTIVITY_BIT
  */
 void ADXL345::setIntActivityPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_ACTIVITY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_ACTIVITY_BIT);
 }
 
 /** Get INACTIVITY interrupt pin.
@@ -963,7 +974,7 @@ void ADXL345::setIntActivityPin(uint8_t pin) {
  * @see ADXL345_INT_INACTIVITY_BIT
  */
 uint8_t ADXL345::getIntInactivityPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_INACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_INACTIVITY_BIT);
 }
 
 /** Set INACTIVITY interrupt pin.
@@ -973,7 +984,7 @@ uint8_t ADXL345::getIntInactivityPin() {
  * @see ADXL345_INT_INACTIVITY_BIT
  */
 void ADXL345::setIntInactivityPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_INACTIVITY_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_INACTIVITY_BIT);
 
 }
 
@@ -984,7 +995,7 @@ void ADXL345::setIntInactivityPin(uint8_t pin) {
  * @see ADXL345_INT_FREE_FALL_BIT
  */
 uint8_t ADXL345::getIntFreefallPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_FREE_FALL_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_FREE_FALL_BIT);
 }
 
 /** Set FREE_FALL interrupt pin.
@@ -994,7 +1005,7 @@ uint8_t ADXL345::getIntFreefallPin() {
  * @see ADXL345_INT_FREE_FALL_BIT
  */
 void ADXL345::setIntFreefallPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_FREE_FALL_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_FREE_FALL_BIT);
 }
 
 /** Get WATERMARK interrupt pin.
@@ -1004,7 +1015,7 @@ void ADXL345::setIntFreefallPin(uint8_t pin) {
  * @see ADXL345_INT_WATERMARK_BIT
  */
 uint8_t ADXL345::getIntWatermarkPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_WATERMARK_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_WATERMARK_BIT);
 }
 
 /** Set WATERMARK interrupt pin.
@@ -1014,7 +1025,7 @@ uint8_t ADXL345::getIntWatermarkPin() {
  * @see ADXL345_INT_WATERMARK_BIT
  */
 void ADXL345::setIntWatermarkPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_WATERMARK_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_WATERMARK_BIT);
 }
 
 /** Get OVERRUN interrupt pin.
@@ -1024,7 +1035,7 @@ void ADXL345::setIntWatermarkPin(uint8_t pin) {
  * @see ADXL345_INT_OVERRUN_BIT
  */
 uint8_t ADXL345::getIntOverrunPin() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_MAP, ADXL345_INT_OVERRUN_BIT);
+	return i2c.readBit(ADXL345_RA_INT_MAP, ADXL345_INT_OVERRUN_BIT);
 }
 
 /** Set OVERRUN interrupt pin.
@@ -1034,7 +1045,7 @@ uint8_t ADXL345::getIntOverrunPin() {
  * @see ADXL345_INT_OVERRUN_BIT
  */
 void ADXL345::setIntOverrunPin(uint8_t pin) {
-	i2c.writeBitNoExit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_OVERRUN_BIT);
+	i2c.writeBit(ADXL345_RA_INT_MAP, pin, ADXL345_INT_OVERRUN_BIT);
 }
 
 // INT_SOURCE register
@@ -1054,7 +1065,7 @@ void ADXL345::setIntOverrunPin(uint8_t pin) {
  * @see ADXL345_INT_DATA_READY_BIT
  */
 uint8_t ADXL345::getIntDataReadySource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_DATA_READY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_DATA_READY_BIT);
 }
 
 /** Get SINGLE_TAP interrupt source flag.
@@ -1063,7 +1074,7 @@ uint8_t ADXL345::getIntDataReadySource() {
  * @see ADXL345_INT_SINGLE_TAP_BIT
  */
 uint8_t ADXL345::getIntSingleTapSource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_SINGLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_SINGLE_TAP_BIT);
 }
 
 /** Get DOUBLE_TAP interrupt source flag.
@@ -1072,7 +1083,7 @@ uint8_t ADXL345::getIntSingleTapSource() {
  * @see ADXL345_INT_DOUBLE_TAP_BIT
  */
 uint8_t ADXL345::getIntDoubleTapSource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_DOUBLE_TAP_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_DOUBLE_TAP_BIT);
 }
 
 /** Get ACTIVITY interrupt source flag.
@@ -1081,7 +1092,7 @@ uint8_t ADXL345::getIntDoubleTapSource() {
  * @see ADXL345_INT_ACTIVITY_BIT
  */
 uint8_t ADXL345::getIntActivitySource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_ACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_ACTIVITY_BIT);
 }
 
 /** Get INACTIVITY interrupt source flag.
@@ -1090,7 +1101,7 @@ uint8_t ADXL345::getIntActivitySource() {
  * @see ADXL345_INT_INACTIVITY_BIT
  */
 uint8_t ADXL345::getIntInactivitySource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_INACTIVITY_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_INACTIVITY_BIT);
 }
 
 /** Get FREE_FALL interrupt source flag.
@@ -1099,7 +1110,7 @@ uint8_t ADXL345::getIntInactivitySource() {
  * @see ADXL345_INT_FREE_FALL_BIT
  */
 uint8_t ADXL345::getIntFreefallSource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_FREE_FALL_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_FREE_FALL_BIT);
 }
 
 /** Get WATERMARK interrupt source flag.
@@ -1108,7 +1119,7 @@ uint8_t ADXL345::getIntFreefallSource() {
  * @see ADXL345_INT_WATERMARK_BIT
  */
 uint8_t ADXL345::getIntWatermarkSource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_WATERMARK_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_WATERMARK_BIT);
 }
 
 /** Get OVERRUN interrupt source flag.
@@ -1117,7 +1128,7 @@ uint8_t ADXL345::getIntWatermarkSource() {
  * @see ADXL345_INT_OVERRUN_BIT
  */
 uint8_t ADXL345::getIntOverrunSource() {
-	return i2c.readBitNoExit(ADXL345_RA_INT_SOURCE, ADXL345_INT_OVERRUN_BIT);
+	return i2c.readBit(ADXL345_RA_INT_SOURCE, ADXL345_INT_OVERRUN_BIT);
 }
 
 // DATA_FORMAT register
@@ -1131,8 +1142,8 @@ uint8_t ADXL345::getIntOverrunSource() {
  * @see ADXL345_FORMAT_SELFTEST_BIT
  */
 uint8_t ADXL345::getSelfTestEnabled() {
-	return i2c.readBitNoExit(ADXL345_RA_DATA_FORMAT,
-			ADXL345_FORMAT_SELFTEST_BIT);
+	return i2c.readBit(ADXL345_RA_DATA_FORMAT,
+	ADXL345_FORMAT_SELFTEST_BIT);
 }
 
 /** Set self-test force enabled.
@@ -1142,8 +1153,8 @@ uint8_t ADXL345::getSelfTestEnabled() {
  * @see ADXL345_FORMAT_SELFTEST_BIT
  */
 void ADXL345::setSelfTestEnabled(uint8_t enabled) {
-	i2c.writeBitNoExit(ADXL345_RA_DATA_FORMAT, enabled,
-			ADXL345_FORMAT_SELFTEST_BIT);
+	i2c.writeBit(ADXL345_RA_DATA_FORMAT, enabled,
+	ADXL345_FORMAT_SELFTEST_BIT);
 }
 
 /** Get SPI mode setting.
@@ -1154,7 +1165,7 @@ void ADXL345::setSelfTestEnabled(uint8_t enabled) {
  * @see ADXL345_FORMAT_SELFTEST_BIT
  */
 uint8_t ADXL345::getSPIMode() {
-	return i2c.readBitNoExit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_SPIMODE_BIT);
+	return i2c.readBit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_SPIMODE_BIT);
 }
 
 /** Set SPI mode setting.
@@ -1164,8 +1175,8 @@ uint8_t ADXL345::getSPIMode() {
  * @see ADXL345_FORMAT_SELFTEST_BIT
  */
 void ADXL345::setSPIMode(uint8_t mode) {
-	i2c.writeBitNoExit(ADXL345_RA_DATA_FORMAT, mode,
-			ADXL345_FORMAT_SPIMODE_BIT);
+	i2c.writeBit(ADXL345_RA_DATA_FORMAT, mode,
+	ADXL345_FORMAT_SPIMODE_BIT);
 }
 
 /** Get interrupt mode setting.
@@ -1176,7 +1187,7 @@ void ADXL345::setSPIMode(uint8_t mode) {
  * @see ADXL345_FORMAT_INTMODE_BIT
  */
 uint8_t ADXL345::getInterruptMode() {
-	return i2c.readBitNoExit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_INTMODE_BIT);
+	return i2c.readBit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_INTMODE_BIT);
 }
 
 /** Set interrupt mode setting.
@@ -1186,8 +1197,8 @@ uint8_t ADXL345::getInterruptMode() {
  * @see ADXL345_FORMAT_INTMODE_BIT
  */
 void ADXL345::setInterruptMode(uint8_t mode) {
-	i2c.writeBitNoExit(ADXL345_RA_DATA_FORMAT, mode,
-			ADXL345_FORMAT_INTMODE_BIT);
+	i2c.writeBit(ADXL345_RA_DATA_FORMAT, mode,
+	ADXL345_FORMAT_INTMODE_BIT);
 }
 
 /** Get full resolution mode setting.
@@ -1201,8 +1212,8 @@ void ADXL345::setInterruptMode(uint8_t mode) {
  * @see ADXL345_FORMAT_FULL_RES_BIT
  */
 uint8_t ADXL345::getFullResolution() {
-	return i2c.readBitNoExit(ADXL345_RA_DATA_FORMAT,
-			ADXL345_FORMAT_FULL_RES_BIT);
+	return i2c.readBit(ADXL345_RA_DATA_FORMAT,
+	ADXL345_FORMAT_FULL_RES_BIT);
 }
 
 /** Set full resolution mode setting.
@@ -1212,8 +1223,8 @@ uint8_t ADXL345::getFullResolution() {
  * @see ADXL345_FORMAT_FULL_RES_BIT
  */
 void ADXL345::setFullResolution(uint8_t resolution) {
-	i2c.writeBitNoExit(ADXL345_RA_DATA_FORMAT, resolution,
-			ADXL345_FORMAT_FULL_RES_BIT);
+	i2c.writeBit(ADXL345_RA_DATA_FORMAT, resolution,
+	ADXL345_FORMAT_FULL_RES_BIT);
 }
 
 /** Get data justification mode setting.
@@ -1224,7 +1235,7 @@ void ADXL345::setFullResolution(uint8_t resolution) {
  * @see ADXL345_FORMAT_JUSTIFY_BIT
  */
 uint8_t ADXL345::getDataJustification() {
-	return i2c.readBitNoExit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_JUSTIFY_BIT);
+	return i2c.readBit(ADXL345_RA_DATA_FORMAT, ADXL345_FORMAT_JUSTIFY_BIT);
 }
 
 /** Set data justification mode setting.
@@ -1234,8 +1245,8 @@ uint8_t ADXL345::getDataJustification() {
  * @see ADXL345_FORMAT_JUSTIFY_BIT
  */
 void ADXL345::setDataJustification(uint8_t justification) {
-	i2c.writeBitNoExit(ADXL345_RA_DATA_FORMAT, justification,
-			ADXL345_FORMAT_JUSTIFY_BIT);
+	i2c.writeBit(ADXL345_RA_DATA_FORMAT, justification,
+	ADXL345_FORMAT_JUSTIFY_BIT);
 }
 
 /** Get data range setting.
@@ -1247,8 +1258,8 @@ void ADXL345::setDataJustification(uint8_t justification) {
  * @see ADXL345_FORMAT_RANGE_LENGTH
  */
 uint8_t ADXL345::getRange() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_DATA_FORMAT,
-			ADXL345_FORMAT_RANGE_LENGTH, ADXL345_FORMAT_RANGE_BIT);
+	return i2c.readMoreBits(ADXL345_RA_DATA_FORMAT,
+	ADXL345_FORMAT_RANGE_LENGTH, ADXL345_FORMAT_RANGE_BIT);
 }
 
 /** Set data range setting.
@@ -1259,8 +1270,8 @@ uint8_t ADXL345::getRange() {
  * @see ADXL345_FORMAT_RANGE_LENGTH
  */
 void ADXL345::setRange(uint8_t range) {
-	i2c.writeMoreBitsNoExit(ADXL345_RA_DATA_FORMAT, range,
-			ADXL345_FORMAT_RANGE_LENGTH, ADXL345_FORMAT_RANGE_BIT);
+	i2c.writeMoreBits(ADXL345_RA_DATA_FORMAT, range,
+	ADXL345_FORMAT_RANGE_LENGTH, ADXL345_FORMAT_RANGE_BIT);
 }
 
 // DATA* registers
@@ -1286,9 +1297,9 @@ void ADXL345::setRange(uint8_t range) {
  * @see ADXL345_RA_DATAX0
  */
 void ADXL345::getAcceleration(int16_t* x, int16_t* y, int16_t* z) {
-	*x = i2c.readWordNoExit(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
-	*y = i2c.readWordNoExit(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
-	*z = i2c.readWordNoExit(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
+	*x = i2c.readWord(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
+	*y = i2c.readWord(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
+	*z = i2c.readWord(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
 }
 
 /** Get X-axis accleration measurement.
@@ -1296,7 +1307,7 @@ void ADXL345::getAcceleration(int16_t* x, int16_t* y, int16_t* z) {
  * @see ADXL345_RA_DATAX0
  */
 int16_t ADXL345::getAccelerationX() {
-	return i2c.readWordNoExit(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
+	return i2c.readWord(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
 }
 
 /** Get Y-axis accleration measurement.
@@ -1304,7 +1315,7 @@ int16_t ADXL345::getAccelerationX() {
  * @see ADXL345_RA_DATAY0
  */
 int16_t ADXL345::getAccelerationY() {
-	return i2c.readWordNoExit(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
+	return i2c.readWord(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
 }
 
 /** Get Z-axis accleration measurement.
@@ -1312,7 +1323,7 @@ int16_t ADXL345::getAccelerationY() {
  * @see ADXL345_RA_DATAZ0
  */
 int16_t ADXL345::getAccelerationZ() {
-	return i2c.readWordNoExit(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
+	return i2c.readWord(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
 }
 
 // FIFO_CTL register
@@ -1338,8 +1349,8 @@ int16_t ADXL345::getAccelerationZ() {
  * @see ADXL345_FIFO_MODE_LENGTH
  */
 uint8_t ADXL345::getFIFOMode() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_FIFO_CTL, ADXL345_FIFO_MODE_LENGTH,
-			ADXL345_FIFO_MODE_BIT);
+	return i2c.readMoreBits(ADXL345_RA_FIFO_CTL, ADXL345_FIFO_MODE_LENGTH,
+	ADXL345_FIFO_MODE_BIT);
 }
 
 /** Set FIFO mode.
@@ -1350,8 +1361,8 @@ uint8_t ADXL345::getFIFOMode() {
  * @see ADXL345_FIFO_MODE_LENGTH
  */
 void ADXL345::setFIFOMode(uint8_t mode) {
-	i2c.writeMoreBitsNoExit(ADXL345_RA_FIFO_CTL, mode, ADXL345_FIFO_MODE_LENGTH,
-			ADXL345_FIFO_MODE_BIT);
+	i2c.writeMoreBits(ADXL345_RA_FIFO_CTL, mode, ADXL345_FIFO_MODE_LENGTH,
+	ADXL345_FIFO_MODE_BIT);
 }
 
 /** Get FIFO trigger interrupt setting.
@@ -1362,7 +1373,7 @@ void ADXL345::setFIFOMode(uint8_t mode) {
  * @see ADXL345_FIFO_TRIGGER_BIT
  */
 uint8_t ADXL345::getFIFOTriggerInterruptPin() {
-	return i2c.readBitNoExit(ADXL345_RA_FIFO_CTL, ADXL345_FIFO_TRIGGER_BIT);
+	return i2c.readBit(ADXL345_RA_FIFO_CTL, ADXL345_FIFO_TRIGGER_BIT);
 }
 
 /** Set FIFO trigger interrupt pin setting.
@@ -1371,8 +1382,8 @@ uint8_t ADXL345::getFIFOTriggerInterruptPin() {
  * @see ADXL345_FIFO_TRIGGER_BIT
  */
 void ADXL345::setFIFOTriggerInterruptPin(uint8_t interrupt) {
-	i2c.writeBitNoExit(ADXL345_RA_FIFO_CTL, interrupt,
-			ADXL345_FIFO_TRIGGER_BIT);
+	i2c.writeBit(ADXL345_RA_FIFO_CTL, interrupt,
+	ADXL345_FIFO_TRIGGER_BIT);
 }
 
 /** Get FIFO samples setting.
@@ -1395,8 +1406,8 @@ void ADXL345::setFIFOTriggerInterruptPin(uint8_t interrupt) {
  * @see ADXL345_FIFO_SAMPLES_LENGTH
  */
 uint8_t ADXL345::getFIFOSamples() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_FIFO_CTL,
-			ADXL345_FIFO_SAMPLES_LENGTH, ADXL345_FIFO_SAMPLES_BIT);
+	return i2c.readMoreBits(ADXL345_RA_FIFO_CTL,
+	ADXL345_FIFO_SAMPLES_LENGTH, ADXL345_FIFO_SAMPLES_BIT);
 }
 
 /** Set FIFO samples setting.
@@ -1408,8 +1419,8 @@ uint8_t ADXL345::getFIFOSamples() {
  * @see ADXL345_FIFO_SAMPLES_LENGTH
  */
 void ADXL345::setFIFOSamples(uint8_t size) {
-	i2c.writeMoreBitsNoExit(ADXL345_RA_FIFO_CTL, size,
-			ADXL345_FIFO_SAMPLES_LENGTH, ADXL345_FIFO_SAMPLES_BIT);
+	i2c.writeMoreBits(ADXL345_RA_FIFO_CTL, size,
+	ADXL345_FIFO_SAMPLES_LENGTH, ADXL345_FIFO_SAMPLES_BIT);
 }
 
 // FIFO_STATUS register
@@ -1422,8 +1433,8 @@ void ADXL345::setFIFOSamples(uint8_t size) {
  * @see ADXL345_FIFOSTAT_TRIGGER_BIT
  */
 bool ADXL345::getFIFOTriggerOccurred() {
-	return i2c.readBitNoExit(ADXL345_RA_FIFO_STATUS,
-			ADXL345_FIFOSTAT_TRIGGER_BIT);
+	return i2c.readBit(ADXL345_RA_FIFO_STATUS,
+	ADXL345_FIFOSTAT_TRIGGER_BIT);
 }
 
 /** Get FIFO length.
@@ -1440,8 +1451,8 @@ bool ADXL345::getFIFOTriggerOccurred() {
  * @see ADXL345_FIFOSTAT_LENGTH_LENGTH
  */
 uint8_t ADXL345::getFIFOLength() {
-	return i2c.readMoreBitsNoExit(ADXL345_RA_FIFO_STATUS,
-			ADXL345_FIFOSTAT_LENGTH_BIT, ADXL345_FIFOSTAT_BIT_START);
+	return i2c.readMoreBits(ADXL345_RA_FIFO_STATUS,
+	ADXL345_FIFOSTAT_LENGTH_BIT, ADXL345_FIFOSTAT_BIT_START);
 }
 
 }  // namespace cacaosd_adxl345

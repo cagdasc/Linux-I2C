@@ -17,12 +17,11 @@
 
 #ifndef HMC5883L_H
 #define	HMC5883L_H
-
 #include "BBB_I2C.h"
-#define I2C_BUS 1
-#include <math.h>
 
-#define DEV_ADD 0x1E
+#define I2C_BUS 1
+
+#define DEF_DEV_ADD 0x1E
 #define CONFIG_A 0x00
 #define CONFIG_B 0x01
 #define MODE_REG 0x02
@@ -82,11 +81,12 @@
 #define LOCK_BIT 0x01
 using namespace cacaosd_bbb_i2c;
 
+namespace cacaosd_hmc5883l {
+
 class HMC5883L {
 public:
-	HMC5883L();
+	HMC5883L(uint8_t DEV_ADD);
 	HMC5883L(BBB_I2C &i2c);
-	HMC5883L(const HMC5883L& orig);
 	virtual ~HMC5883L();
 
 	void initialize();
@@ -108,7 +108,8 @@ public:
 
 private:
 	BBB_I2C i2c;
+	uint8_t DEV_ADD;
 };
-
+}  // namespace cacaosd_hmc5883l
 #endif	/* HMC5883L_H */
 

@@ -152,13 +152,14 @@ namespace cacaosd_adxl345 {
 
 class ADXL345 {
 public:
-	ADXL345();
+	ADXL345(uint8_t DEV_ADD);
 	ADXL345(BBB_I2C &i2c);
-	ADXL345(const ADXL345& orig);
 	virtual ~ADXL345();
 
 	void initialize();
 	bool testConnection();
+	void setDeviceAddress(uint8_t DEV_ADD);
+	uint8_t getDeviceAddress();
 
 	// DEVID register
 	uint8_t getDeviceID();
@@ -344,6 +345,7 @@ public:
 
 private:
 	BBB_I2C i2c;
+	uint8_t DEV_ADD;
 };
 
 }  // namespace cacaosd_adxl345

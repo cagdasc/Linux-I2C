@@ -100,7 +100,6 @@ class MPU6050 {
 public:
 	MPU6050(uint8_t DEV_ADD);
 	MPU6050(BBB_I2C &i2c);
-	MPU6050(const MPU6050& orig);
 	virtual ~MPU6050();
 
 	void init();

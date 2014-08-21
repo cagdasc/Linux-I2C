@@ -14,30 +14,28 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
-#include "BBB_I2C.h"
 
-#define DEV_ADD 0x21
-#define I2C_BUS 1
+#include <stdio.h>
+#include <stdlib.h>
+#include "HMC5883L.h"
 
 using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_hmc5883l;
 
 int main(int argc, char **argv) {
 
-	BBB_I2C i2c(DEV_ADD, I2C_BUS);
-	int data_length = 3;
-
-	uint8_t *dataArray;
-
-	dataArray = (uint8_t*) calloc(data_length, sizeof(uint8_t));
-	dataArray[0] = 11;
-	dataArray[1] = 12;
-	dataArray[2] = 13;
+	BBB_I2C i2c;
+	HMC5883L hmc(i2c);
+	hmc.initialize();
 
 	while (true) {
-		i2c.writeByteBufferArduino(dataArray, 3);
+		printf("Mag X: %d\n", hmc.getMagnitudeX());
+		printf("Mag Y: %d\n", hmc.getMagnitudeY());
+		printf("Mag Z: %d\n", hmc.getMagnitudeZ());
+		printf("-------------\n");
+
 		usleep(200000);
 	}
-
+	return 0;
 }
 

@@ -19,7 +19,7 @@
 namespace cacaosd_mpu6050 {
 
 MPU6050::MPU6050(uint8_t DEV_ADD) :
-		i2c(DEV_ADD, 1) {
+		i2c(DEV_ADD, I2C_BUS) {
 	this->DEV_ADD = DEV_ADD;
 }
 
@@ -41,17 +41,17 @@ uint8_t MPU6050::getDeviceAddress() {
 }
 
 void MPU6050::setSleepMode(bool mode) {
-	int8_t byte = i2c.readByteNoExit(PWR_MGMT_1);
+	int8_t byte = i2c.readByte(PWR_MGMT_1);
 	if (mode) {
 		byte |= 64;
 	} else {
 		byte &= ~64;
 	}
-	i2c.writeByteNoExit(PWR_MGMT_1, byte);
+	i2c.writeByte(PWR_MGMT_1, byte);
 }
 
 bool MPU6050::getSleepMode() {
-	int8_t byte = i2c.readByteNoExit(PWR_MGMT_1);
+	int8_t byte = i2c.readByte(PWR_MGMT_1);
 	byte >>= 6;
 	byte %= 2;
 	if (byte == 1) {
@@ -63,7 +63,7 @@ bool MPU6050::getSleepMode() {
 
 void MPU6050::setRangeAcceleration(uint8_t range) {
 	uint8_t afs;
-	afs = i2c.readByteNoExit(ACCEL_CONFIG);
+	afs = i2c.readByte(ACCEL_CONFIG);
 	if (range == 0) {
 		afs &= ~24;
 	} else if (range == 1) {
@@ -75,12 +75,12 @@ void MPU6050::setRangeAcceleration(uint8_t range) {
 	} else {
 		afs |= 24;
 	}
-	i2c.writeByteNoExit(ACCEL_CONFIG, afs);
+	i2c.writeByte(ACCEL_CONFIG, afs);
 }
 
 uint8_t MPU6050::getRangeAcceleration() {
 	uint8_t afs;
-	afs = i2c.readByteNoExit(ACCEL_CONFIG);
+	afs = i2c.readByte(ACCEL_CONFIG);
 	afs >>= 3;
 	afs %= 4;
 	return afs;
@@ -88,7 +88,7 @@ uint8_t MPU6050::getRangeAcceleration() {
 
 void MPU6050::setRangeGyroscope(uint8_t range) {
 	uint8_t fs;
-	fs = i2c.readByteNoExit(GYRO_CONFIG);
+	fs = i2c.readByte(GYRO_CONFIG);
 	if (range == 0) {
 		fs &= ~24;
 	} else if (range == 1) {
@@ -100,12 +100,12 @@ void MPU6050::setRangeGyroscope(uint8_t range) {
 	} else {
 		fs |= 24;
 	}
-	i2c.writeByteNoExit(GYRO_CONFIG, fs);
+	i2c.writeByte(GYRO_CONFIG, fs);
 }
 
 uint8_t MPU6050::getRangeGyroscope() {
 	uint8_t fs;
-	fs = i2c.readByteNoExit(GYRO_CONFIG);
+	fs = i2c.readByte(GYRO_CONFIG);
 	fs >>= 3;
 	fs %= 4;
 	return fs;
@@ -119,63 +119,63 @@ void MPU6050::init() {
 
 void MPU6050::getAccelerations(int16_t *ax, int16_t *ay, int16_t *az) {
 
-	*ax = i2c.readWordNoExit(ACCEL_XOUT_H, ACCEL_XOUT_L);
-	*ay = i2c.readWordNoExit(ACCEL_YOUT_H, ACCEL_YOUT_L);
-	*az = i2c.readWordNoExit(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+	*ax = i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+	*ay = i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+	*az = i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 
 }
 
 int16_t MPU6050::getAccelerationX() {
-	return i2c.readWordNoExit(ACCEL_XOUT_H, ACCEL_XOUT_L);
+	return i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
 }
 
 int16_t MPU6050::getAccelerationY() {
-	return i2c.readWordNoExit(ACCEL_YOUT_H, ACCEL_YOUT_L);
+	return i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
 }
 
 int16_t MPU6050::getAccelerationZ() {
-	return i2c.readWordNoExit(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+	return i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 }
 
 void MPU6050::getAngularVelocities(int16_t* gx, int16_t* gy, int16_t* gz) {
 
-	*gx = i2c.readWordNoExit(GYRO_XOUT_H, GYRO_XOUT_L);
-	*gy = i2c.readWordNoExit(GYRO_YOUT_H, GYRO_YOUT_L);
-	*gz = i2c.readWordNoExit(GYRO_ZOUT_H, GYRO_ZOUT_L);
+	*gx = i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+	*gy = i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+	*gz = i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
 
 }
 
 int16_t MPU6050::getAngularVelocityX() {
-	return i2c.readWordNoExit(GYRO_XOUT_H, GYRO_XOUT_L);
+	return i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
 }
 
 int16_t MPU6050::getAngularVelocityY() {
-	return i2c.readWordNoExit(GYRO_YOUT_H, GYRO_YOUT_L);
+	return i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
 }
 
 int16_t MPU6050::getAngularVelocityZ() {
-	return i2c.readWordNoExit(GYRO_ZOUT_H, GYRO_ZOUT_L);
+	return i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
 }
 
 int16_t MPU6050::getTemperature() {
-	return i2c.readWordNoExit(TEMP_OUT_H, TEMP_OUT_L);
+	return i2c.readWord(TEMP_OUT_H, TEMP_OUT_L);
 }
 
 void MPU6050::getMotions6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
 		int16_t* gy, int16_t* gz) {
 
-	*ax = i2c.readWordNoExit(ACCEL_XOUT_H, ACCEL_XOUT_L);
-	*ay = i2c.readWordNoExit(ACCEL_YOUT_H, ACCEL_YOUT_L);
-	*az = i2c.readWordNoExit(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+	*ax = i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+	*ay = i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+	*az = i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 
-	*gx = i2c.readWordNoExit(GYRO_XOUT_H, GYRO_XOUT_L);
-	*gy = i2c.readWordNoExit(GYRO_YOUT_H, GYRO_YOUT_L);
-	*gz = i2c.readWordNoExit(GYRO_ZOUT_H, GYRO_ZOUT_L);
+	*gx = i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+	*gy = i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+	*gz = i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
 
 }
 
 void MPU6050::setDLPFMode(uint8_t mode) {
-	uint8_t config = i2c.readByteNoExit(CONFIG);
+	uint8_t config = i2c.readByte(CONFIG);
 	if (mode == 0) {
 		config = config & ~7;
 	} else if (mode == 1) {
@@ -200,116 +200,116 @@ void MPU6050::setDLPFMode(uint8_t mode) {
 		config |= 7;
 	}
 
-	i2c.writeByteNoExit(CONFIG, config);
+	i2c.writeByte(CONFIG, config);
 }
 
 uint8_t MPU6050::getDLPFMode() {
-	uint8_t config = i2c.readByteNoExit(CONFIG);
+	uint8_t config = i2c.readByte(CONFIG);
 	return config % 8;
 }
 
 void MPU6050::setSampleRate(uint8_t rate) {
-	i2c.writeByteNoExit(SMPLRT_DIV, rate);
+	i2c.writeByte(SMPLRT_DIV, rate);
 }
 
 uint8_t MPU6050::getSampleRate() {
-	return i2c.readByteNoExit(SMPLRT_DIV);
+	return i2c.readByte(SMPLRT_DIV);
 }
 
 void MPU6050::setMotionDetectionThresold(uint8_t value) {
-	i2c.writeByteNoExit(MOT_THR, value);
+	i2c.writeByte(MOT_THR, value);
 }
 
 uint8_t MPU6050::getMotionDetectionThresold() {
-	return i2c.readByteNoExit(MOT_THR);
+	return i2c.readByte(MOT_THR);
 }
 
 void MPU6050::setTEMP_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, TEMP_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, TEMP_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getTEMP_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, TEMP_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, TEMP_FIFO_EN_BIT);
 }
 
 void MPU6050::setXG_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, XG_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, XG_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getXG_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, XG_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, XG_FIFO_EN_BIT);
 }
 
 void MPU6050::setYG_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, YG_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, YG_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getYG_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, YG_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, YG_FIFO_EN_BIT);
 }
 
 void MPU6050::setZG_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, ZG_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, ZG_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getZG_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, ZG_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, ZG_FIFO_EN_BIT);
 }
 
 void MPU6050::setACCEL_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, ACCEL_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, ACCEL_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getACCEL_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, ACCEL_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, ACCEL_FIFO_EN_BIT);
 }
 
 void MPU6050::setSLV2_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, SLV2_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, SLV2_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getSLV2_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, SLV2_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, SLV2_FIFO_EN_BIT);
 }
 
 void MPU6050::setSLV1_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, SLV1_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, SLV1_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getSLV1_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, SLV1_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, SLV1_FIFO_EN_BIT);
 }
 
 void MPU6050::setSLV0_FIFO_EN(uint8_t value) {
-	i2c.writeBitNoExit(FIFO_EN, value, SLV0_FIFO_EN_BIT);
+	i2c.writeBit(FIFO_EN, value, SLV0_FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getSLV0_FIFO_EN() {
-	return i2c.readBitNoExit(FIFO_EN, SLV0_FIFO_EN_BIT);
+	return i2c.readBit(FIFO_EN, SLV0_FIFO_EN_BIT);
 }
 
 uint16_t MPU6050::getFIFO_Count() {
-	return i2c.readWordNoExit(FIFO_COUNTH, FIFO_COUNTL);
+	return i2c.readWord(FIFO_COUNTH, FIFO_COUNTL);
 }
 
 void MPU6050::setFIFO_Enable(uint8_t value) {
-	i2c.writeBitNoExit(USER_CTRL, value, FIFO_EN_BIT);
+	i2c.writeBit(USER_CTRL, value, FIFO_EN_BIT);
 }
 
 uint8_t MPU6050::getFIFO_Enable() {
-	return i2c.readBitNoExit(USER_CTRL, FIFO_EN_BIT);
+	return i2c.readBit(USER_CTRL, FIFO_EN_BIT);
 }
 
 void MPU6050::getFIFO_Data(uint8_t *data, uint8_t length) {
-	i2c.readByteBufferNoExit(FIFO_R_W, data, length);
+	i2c.readByteBuffer(FIFO_R_W, data, length);
 }
 
 void MPU6050::setFIFO_Reset(uint8_t value) {
-	i2c.writeBitNoExit(USER_CTRL, value, FIFO_RESET_BIT);
+	i2c.writeBit(USER_CTRL, value, FIFO_RESET_BIT);
 }
 
 uint8_t MPU6050::getFIFO_Reset() {
-	return i2c.readBitNoExit(USER_CTRL, FIFO_RESET_BIT);
+	return i2c.readBit(USER_CTRL, FIFO_RESET_BIT);
 }
 
 }  // namespace cacaosd_mpu6050
