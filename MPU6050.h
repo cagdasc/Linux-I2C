@@ -90,6 +90,7 @@
 #define SLV2_FIFO_EN_BIT 2
 #define SLV1_FIFO_EN_BIT 1
 #define SLV0_FIFO_EN_BIT 0
+#define DEV_RESET_BIT 7
 #define FIFO_EN_BIT 6
 #define FIFO_RESET_BIT 2
 using namespace cacaosd_bbb_i2c;
@@ -103,6 +104,7 @@ public:
 	virtual ~MPU6050();
 
 	void init();
+	void reset();
 	void setDeviceAddress(uint8_t DEV_ADD);
 	uint8_t getDeviceAddress();
 

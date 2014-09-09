@@ -105,6 +105,9 @@ public:
 	int16_t getMagnitudeZ();
 	uint8_t getRDYStatus();
 	uint8_t getLockStatus();
+	uint8_t getIDA();
+	uint8_t getIDB();
+	uint8_t getIDC();
 
 private:
 	BBB_I2C i2c;

@@ -42,139 +42,372 @@ uint8_t ADXL345::getDeviceAddress() {
 	return this->DEV_ADD;
 }
 
+/** Power on and prepare for general usage.
+ * This will activate the accelerometer, so be sure to adjust the power settings
+ * after you call this method if you want it to enter standby mode, or another
+ * less demanding mode of operation.
+ */
 void ADXL345::initialize() {
 	i2c.writeByte(ADXL345_RA_POWER_CTL, 0);
 	setAutoSleepEnabled(true);
 	setMeasureEnabled(true);
 }
 
+/** Get Device ID.
+ * The DEVID register holds a fixed device ID code of 0xE5 (345 octal).
+ * @return Device ID (should be 0xE5, 229 dec, 345 oct)
+ * @see ADXL345_RA_DEVID
+ */
 uint8_t ADXL345::getDeviceID() {
 	return i2c.readByte(ADXL345_RA_DEVID);
 }
 
+/** Get tap threshold.
+ * The THRESH_TAP register is eight bits and holds the threshold value for tap
+ * interrupts. The data format is unsigned, therefore, the magnitude of the tap
+ * event is compared with the value in THRESH_TAP for normal tap detection. The
+ * scale factor is 62.5 mg/LSB (that is, 0xFF = 16 g). A value of 0 may result
+ * in undesirable behavior if single tap/double tap interrupts are enabled.
+ * @return Tap threshold (scaled at 62.5 mg/LSB)
+ * @see ADXL345_RA_THRESH_TAP
+ */
 uint8_t ADXL345::getTapThreshold() {
 	return i2c.readByte(ADXL345_RA_THRESH_TAP);
 }
 
+/** Set tap threshold.
+ * @param threshold Tap magnitude threshold (scaled at 62.5 mg/LSB)
+ * @see ADXL345_RA_THRESH_TAP
+ * @see getTapThreshold()
+ */
 void ADXL345::setTapThreshold(uint8_t threshold) {
 	i2c.writeByte(ADXL345_RA_THRESH_TAP, threshold);
 }
 
+/** Set axis offsets.
+ * @param x X axis offset value
+ * @param y Y axis offset value
+ * @param z Z axis offset value
+ * @see getOffset()
+ * @see ADXL345_RA_OFSX
+ * @see ADXL345_RA_OFSY
+ * @see ADXL345_RA_OFSZ
+ */
 void ADXL345::setOffset(int8_t x, int8_t y, int8_t z) {
 	i2c.writeByte(ADXL345_RA_OFSX, x);
 	i2c.writeByte(ADXL345_RA_OFSY, y);
 	i2c.writeByte(ADXL345_RA_OFSZ, z);
 }
 
+/** Get X axis offset.
+ * @return X axis offset value
+ * @see getOffset()
+ * @see ADXL345_RA_OFSX
+ */
 int8_t ADXL345::getOffsetX() {
 	return i2c.readByte(ADXL345_RA_OFSX);
 }
 
+/** Set X axis offset.
+ * @param x X axis offset value
+ * @see getOffset()
+ * @see ADXL345_RA_OFSX
+ */
 void ADXL345::setOffsetX(int8_t x) {
 	i2c.writeByte(ADXL345_RA_OFSX, x);
 }
 
+/** Get Y axis offset.
+ * @return Y axis offset value
+ * @see ADXL345_RA_OFSY
+ */
 int8_t ADXL345::getOffsetY() {
 	return i2c.readByte(ADXL345_RA_OFSY);
 }
 
+/** Set Y axis offset.
+ * @param y Y axis offset value
+ * @see ADXL345_RA_OFSY
+ */
 void ADXL345::setOffsetY(int8_t y) {
 	i2c.writeByte(ADXL345_RA_OFSY, y);
 }
 
+/** Get Z axis offset.
+ * @return Z axis offset value
+ * @see ADXL345_RA_OFSZ
+ */
 int8_t ADXL345::getOffsetZ() {
 	return i2c.readByte(ADXL345_RA_OFSZ);
 }
 
+/** Set Z axis offset.
+ * @param z Z axis offset value
+ * @see ADXL345_RA_OFSZ
+ */
 void ADXL345::setOffsetZ(int8_t z) {
 	i2c.writeByte(ADXL345_RA_OFSZ, z);
 }
 
+/** Get tap duration.
+ * The DUR register is eight bits and contains an unsigned time value
+ * representing the maximum time that an event must be above the THRESH_TAP
+ * threshold to qualify as a tap event. The scale factor is 625 us/LSB. A value
+ * of 0 disables the single tap/ double tap functions.
+ * @return Tap duration (scaled at 625 us/LSB)
+ * @see ADXL345_RA_DUR
+ */
 uint8_t ADXL345::getTapDuration() {
 	return i2c.readByte(ADXL345_RA_DUR);
 }
 
+/** Set tap duration.
+ * @param duration Tap duration (scaled at 625 us/LSB)
+ * @see getTapDuration()
+ * @see ADXL345_RA_DUR
+ */
 void ADXL345::setTapDuration(uint8_t duration) {
 	i2c.writeByte(ADXL345_RA_DUR, duration);
 }
 
+/** Get tap duration.
+ * The latent register is eight bits and contains an unsigned time value
+ * representing the wait time from the detection of a tap event to the start of
+ * the time window (defined by the window register) during which a possible
+ * second tap event can be detected. The scale factor is 1.25 ms/LSB. A value of
+ * 0 disables the double tap function.
+ * @return Tap latency (scaled at 1.25 ms/LSB)
+ * @see ADXL345_RA_LATENT
+ */
 uint8_t ADXL345::getDoubleTapLatency() {
 	return i2c.readByte(ADXL345_RA_LATENT);
 }
 
+/** Set tap duration.
+ * @param latency Tap latency (scaled at 1.25 ms/LSB)
+ * @see getDoubleTapLatency()
+ * @see ADXL345_RA_LATENT
+ */
 void ADXL345::setDoubleTapLatency(uint8_t latency) {
 	i2c.writeByte(ADXL345_RA_LATENT, latency);
 }
 
+/** Get double tap window.
+ * The window register is eight bits and contains an unsigned time value
+ * representing the amount of time after the expiration of the latency time
+ * (determined by the latent register) during which a second valid tap can
+ * begin. The scale factor is 1.25 ms/LSB. A value of 0 disables the double tap
+ * function.
+ * @return Double tap window (scaled at 1.25 ms/LSB)
+ * @see ADXL345_RA_WINDOW
+ */
 uint8_t ADXL345::getDoubleTapWindow() {
 	return i2c.readByte(ADXL345_RA_WINDOW);
 }
 
+/** Set double tap window.
+ * @param window Double tap window (scaled at 1.25 ms/LSB)
+ * @see getDoubleTapWindow()
+ * @see ADXL345_RA_WINDOW
+ */
 void ADXL345::setDoubleTapWindow(uint8_t window) {
 	i2c.writeByte(ADXL345_RA_WINDOW, window);
 }
 
+/** Get activity threshold.
+ * The THRESH_ACT register is eight bits and holds the threshold value for
+ * detecting activity. The data format is unsigned, so the magnitude of the
+ * activity event is compared with the value in the THRESH_ACT register. The
+ * scale factor is 62.5 mg/LSB. A value of 0 may result in undesirable behavior
+ * if the activity interrupt is enabled.
+ * @return Activity threshold (scaled at 62.5 mg/LSB)
+ * @see ADXL345_RA_THRESH_ACT
+ */
 uint8_t ADXL345::getActivityThreshold() {
 	return i2c.readByte(ADXL345_RA_THRESH_ACT);
 }
 
+/** Set activity threshold.
+ * @param threshold Activity threshold (scaled at 62.5 mg/LSB)
+ * @see getActivityThreshold()
+ * @see ADXL345_RA_THRESH_ACT
+ */
 void ADXL345::setActivityThreshold(uint8_t threshold) {
 	i2c.writeByte(ADXL345_RA_THRESH_ACT, threshold);
 }
 
+/** Get inactivity threshold.
+ * The THRESH_INACT register is eight bits and holds the threshold value for
+ * detecting inactivity. The data format is unsigned, so the magnitude of the
+ * inactivity event is compared with the value in the THRESH_INACT register. The
+ * scale factor is 62.5 mg/LSB. A value of 0 may result in undesirable behavior
+ * if the inactivity interrupt is enabled.
+ * @return Inactivity threshold (scaled at 62.5 mg/LSB)
+ * @see ADXL345_RA_THRESH_INACT
+ */
 uint8_t ADXL345::getInactivityThreshold() {
 	return i2c.readByte(ADXL345_RA_THRESH_INACT);
 }
 
+/** Set inactivity threshold.
+ * @param threshold Inctivity threshold (scaled at 62.5 mg/LSB)
+ * @see getInctivityThreshold()
+ * @see ADXL345_RA_THRESH_INACT
+ */
 void ADXL345::setInactivityThreshold(uint8_t threshold) {
 	i2c.writeByte(ADXL345_RA_THRESH_INACT, threshold);
 }
 
+/** Set inactivity time.
+ * The TIME_INACT register is eight bits and contains an unsigned time value
+ * representing the amount of time that acceleration must be less than the value
+ * in the THRESH_INACT register for inactivity to be declared. The scale factor
+ * is 1 sec/LSB. Unlike the other interrupt functions, which use unfiltered data
+ * (see the Threshold sectionof the datasheet), the inactivity function uses
+ * filtered output data. At least one output sample must be generated for the
+ * inactivity interrupt to be triggered. This results in the function appearing
+ * unresponsive if the TIME_INACT register is set to a value less than the time
+ * constant of the output data rate. A value of 0 results in an interrupt when
+ * the output data is less than the value in the THRESH_INACT register.
+ * @return Inactivity time (scaled at 1 sec/LSB)
+ * @see ADXL345_RA_TIME_INACT
+ */
 uint8_t ADXL345::getInactivityTime() {
 	return i2c.readByte(ADXL345_RA_TIME_INACT);
 }
 
+/** Set inactivity time.
+ * @param time Inactivity time (scaled at 1 sec/LSB)
+ * @see getInctivityTime()
+ * @see ADXL345_RA_TIME_INACT
+ */
 void ADXL345::setInactivityTime(uint8_t time) {
 	i2c.writeByte(ADXL345_RA_TIME_INACT, time);
 }
 
+/** Get activity AC/DC coupling.
+ * A setting of 0 selects dc-coupled operation, and a setting of 1 enables
+ * ac-coupled operation. In dc-coupled operation, the current acceleration
+ * magnitude is compared directly with THRESH_ACT and THRESH_INACT to determine
+ * whether activity or inactivity is detected.
+ *
+ * In ac-coupled operation for activity detection, the acceleration value at the
+ * start of activity detection is taken as a reference value. New samples of
+ * acceleration are then compared to this reference value, and if the magnitude
+ * of the difference exceeds the THRESH_ACT value, the device triggers an
+ * activity interrupt.
+ *
+ * Similarly, in ac-coupled operation for inactivity detection, a reference
+ * value is used for comparison and is updated whenever the device exceeds the
+ * inactivity threshold. After the reference value is selected, the device
+ * compares the magnitude of the difference between the reference value and the
+ * current acceleration with THRESH_INACT. If the difference is less than the
+ * value in THRESH_INACT for the time in TIME_INACT, the device is considered
+ * inactive and the inactivity interrupt is triggered.
+ *
+ * @return Activity coupling (0 = DC, 1 = AC)
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_AC_BIT
+ */
 bool ADXL345::getActivityAC() {
 	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_AC_BIT);
 }
 
+/** Set activity AC/DC coupling.
+ * @param enabled Activity AC/DC coupling (TRUE for AC, FALSE for DC)
+ * @see getActivityAC()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_AC_BIT
+ */
 void ADXL345::setActivityAC(bool enabled) {
 	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
 	ADXL345_AIC_ACT_AC_BIT);
 }
 
+/** Get X axis activity monitoring inclusion.
+ * For all "get[In]Activity*Enabled()" methods: a setting of 1 enables x-, y-,
+ * or z-axis participation in detecting activity or inactivity. A setting of 0
+ * excludes the selected axis from participation. If all axes are excluded, the
+ * function is disabled. For activity detection, all participating axes are
+ * logically OR�ed, causing the activity function to trigger when any of the
+ * participating axes exceeds the threshold. For inactivity detection, all
+ * participating axes are logically AND�ed, causing the inactivity function to
+ * trigger only if all participating axes are below the threshold for the
+ * specified time.
+ * @return X axis activity monitoring enabled value
+ * @see getActivityAC()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_X_BIT
+ */
 bool ADXL345::getActivityXEnabled() {
 	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_X_BIT);
 }
 
+/** Set X axis activity monitoring inclusion.
+ * @param enabled X axis activity monitoring inclusion value
+ * @see getActivityAC()
+ * @see getActivityXEnabled()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_X_BIT
+ */
 void ADXL345::setActivityXEnabled(bool enabled) {
 	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
 	ADXL345_AIC_ACT_X_BIT);
 }
 
+/** Get Y axis activity monitoring.
+ * @return Y axis activity monitoring enabled value
+ * @see getActivityAC()
+ * @see getActivityXEnabled()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_Y_BIT
+ */
 bool ADXL345::getActivityYEnabled() {
 	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Y_BIT);
 }
 
+/** Set Y axis activity monitoring inclusion.
+ * @param enabled Y axis activity monitoring inclusion value
+ * @see getActivityAC()
+ * @see getActivityXEnabled()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_Y_BIT
+ */
 void ADXL345::setActivityYEnabled(bool enabled) {
 	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
 	ADXL345_AIC_ACT_Y_BIT);
 
 }
 
+/** Get Z axis activity monitoring.
+ * @return Z axis activity monitoring enabled value
+ * @see getActivityAC()
+ * @see getActivityXEnabled()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_Z_BIT
+ */
 bool ADXL345::getActivityZEnabled() {
 	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_ACT_Z_BIT);
 }
 
+/** Set Z axis activity monitoring inclusion.
+ * @param enabled Z axis activity monitoring inclusion value
+ * @see getActivityAC()
+ * @see getActivityXEnabled()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_ACT_Z_BIT
+ */
 void ADXL345::setActivityZEnabled(bool enabled) {
 	i2c.writeBit(ADXL345_RA_ACT_INACT_CTL, enabled,
 	ADXL345_AIC_ACT_Z_BIT);
 }
 
+/** Get inactivity AC/DC coupling.
+ * @return Inctivity coupling (0 = DC, 1 = AC)
+ * @see getActivityAC()
+ * @see ADXL345_RA_ACT_INACT_CTL
+ * @see ADXL345_AIC_INACT_AC_BIT
+ */
 bool ADXL345::getInactivityAC() {
 	return i2c.readBit(ADXL345_RA_ACT_INACT_CTL, ADXL345_AIC_INACT_AC_BIT);
 }
