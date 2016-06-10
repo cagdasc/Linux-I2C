@@ -15,27 +15,34 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "HMC5883L.h"
+#include "AllDevices.h"
 
 using namespace cacaosd_bbb_i2c;
 using namespace cacaosd_hmc5883l;
 
-int main(int argc, char **argv) {
+int ctrl;
 
-	BBB_I2C i2c;
-	HMC5883L hmc(i2c);
-	hmc.initialize();
+int main() {
 
-	while (true) {
-		printf("Mag X: %d\n", hmc.getMagnitudeX());
-		printf("Mag Y: %d\n", hmc.getMagnitudeY());
-		printf("Mag Z: %d\n", hmc.getMagnitudeZ());
-		printf("-------------\n");
+	ctrl = 1;
+	signal(SIGINT, signal_handler);
 
+	BBB_I2C *i2c = new BBB_I2C(HMC5883L_DEV_ADD, 2);
+	i2c->openConnection();
+
+	HMC5883L *hmc5883L = new HMC5883L(i2c);
+	hmc5883L->initialize();
+
+	while (ctrl) {
+		std::cout << "HMC5883L" << std::endl;
+		std::cout << "Mag X: " << hmc5883L->getMagnitudeX() << std::endl;
+		std::cout << "Mag Y: " << hmc5883L->getMagnitudeY() << std::endl;
+		std::cout << "Mag Z: " << hmc5883L->getMagnitudeZ() << std::endl;
+		std::cout << "----------------------" << std::endl;
 		usleep(200000);
 	}
+
+	delete i2c, hmc5883L;
 	return 0;
 }
 

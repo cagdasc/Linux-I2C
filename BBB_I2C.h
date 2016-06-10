@@ -16,7 +16,7 @@
  */
 
 #ifndef BBB_I2C_H
-#define	BBB_I2C_H
+#define    BBB_I2C_H
 
 #include <math.h>
 #include <stdlib.h>
@@ -27,7 +27,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define I2C_BUS 1
 #define PATH_SIZE 15
 
 #define msg_error(M, ...) printf("[ERROR]:"M"\n",##__VA_ARGS__);
@@ -35,41 +34,55 @@
 
 namespace cacaosd_bbb_i2c {
 
-class BBB_I2C {
-public:
+    class BBB_I2C {
+    public:
 
-	BBB_I2C();
-	BBB_I2C(uint8_t DEV_ADD);
-	BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr);
-	~BBB_I2C();
+        BBB_I2C(uint8_t busAddr);
 
-	int openConnection();
+        BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr);
 
-	void setBusAddress(uint8_t busAddr);
-	uint8_t getBusAddress();
+        ~BBB_I2C();
 
-	void writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum);
-	void writeMoreBits(uint8_t DATA_REGADD, uint8_t data, uint8_t length,
-			uint8_t startBit);
-	void writeByte(uint8_t DATA_REGADD, uint8_t data);
-	void writeByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length);
-	void writeByteArduino(int8_t data);
-	void writeByteBufferArduino(uint8_t *data, uint8_t length);
+        void openConnection();
 
-	uint8_t readBit(uint8_t DATA_REGADD, uint8_t bitNum);
-	uint8_t readMoreBits(uint8_t DATA_REGADD, uint8_t length, uint8_t startBit);
-	uint8_t readByte(uint8_t DATA_REGADD);
-	void readByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length);
-	void readByteBufferArduino(uint8_t *data, uint8_t length);
-	int16_t readWord(uint8_t MSB, uint8_t LSB);
-	void setDEV_ADD(uint8_t DEV_ADD);
+        void setBusAddress(uint8_t busAddr);
 
-private:
-	uint8_t busAddr;
-	uint8_t DEV_ADD;
-	char *path;
+        uint8_t getBusAddress();
 
-};
+        void writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum);
+
+        void writeMoreBits(uint8_t DATA_REGADD, uint8_t data, uint8_t length,
+                           uint8_t startBit);
+
+        void writeByte(uint8_t DATA_REGADD, uint8_t data);
+
+        void writeByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length);
+
+        void writeByteArduino(int8_t data);
+
+        void writeByteBufferArduino(uint8_t *data, uint8_t length);
+
+        uint8_t readBit(uint8_t DATA_REGADD, uint8_t bitNum);
+
+        uint8_t readMoreBits(uint8_t DATA_REGADD, uint8_t length, uint8_t startBit);
+
+        uint8_t readByte(uint8_t DATA_REGADD);
+
+        void readByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length);
+
+        void readByteBufferArduino(uint8_t *data, uint8_t length);
+
+        int16_t readWord(uint8_t MSB, uint8_t LSB);
+
+        void setDEV_ADD(uint8_t DEV_ADD);
+
+    private:
+        int file_descriptor;
+        uint8_t busAddr;
+        uint8_t DEV_ADD;
+        char *path;
+
+    };
 }  // namespace cacaosd_bbb_i2c
 
 #endif	/* BBB_I2C_H */

@@ -16,9 +16,10 @@
  */
 
 #ifndef MPU6050_H
-#define	MPU6050_H
+#define    MPU6050_H
+
 #include "BBB_I2C.h"
-#define I2C_BUS 1
+
 #define SELF_TEST_X 0x0D
 #define SELF_TEST_Y 0x0E
 #define SELF_TEST_Z 0x0F
@@ -79,7 +80,7 @@
 #define FIFO_COUNTL 0x73
 #define FIFO_R_W 0x74
 #define WHO_AM_I 0x75
-#define DEF_DEV_ADD 0x68
+#define MPU6050_DEV_ADD 0x68
 #define AFS_SEL 0x1C
 #define FS_SEL 0x1B
 #define TEMP_FIFO_EN_BIT 7
@@ -97,88 +98,113 @@ using namespace cacaosd_bbb_i2c;
 
 namespace cacaosd_mpu6050 {
 
-class MPU6050 {
-public:
-	MPU6050(uint8_t DEV_ADD);
-	MPU6050(BBB_I2C &i2c);
-	virtual ~MPU6050();
+    class MPU6050 {
+    public:
+        MPU6050(BBB_I2C *i2c);
 
-	void init();
-	void reset();
-	void setDeviceAddress(uint8_t DEV_ADD);
-	uint8_t getDeviceAddress();
+        virtual ~MPU6050();
 
-	void setSleepMode(bool mode);
-	bool getSleepMode();
+        void init();
 
-	void setRangeAcceleration(uint8_t range);
-	uint8_t getRangeAcceleration();
+        void reset();
 
-	void setRangeGyroscope(uint8_t range);
-	uint8_t getRangeGyroscope();
+        void setDeviceAddress(uint8_t DEV_ADD);
 
-	void getAccelerations(int16_t *ax, int16_t *ay, int16_t *az);
-	int16_t getAccelerationX();
-	int16_t getAccelerationY();
-	int16_t getAccelerationZ();
+        uint8_t getDeviceAddress();
 
-	void getAngularVelocities(int16_t *gx, int16_t *gy, int16_t *gz);
-	int16_t getAngularVelocityX();
-	int16_t getAngularVelocityY();
-	int16_t getAngularVelocityZ();
+        void setSleepMode(bool mode);
 
-	void getMotions6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx,
-			int16_t *gy, int16_t *gz);
+        bool getSleepMode();
 
-	int16_t getTemperature();
+        void setRangeAcceleration(uint8_t range);
 
-	void setDLPFMode(uint8_t mode);
-	uint8_t getDLPFMode();
+        uint8_t getRangeAcceleration();
 
-	void setSampleRate(uint8_t rate);
-	uint8_t getSampleRate();
+        void setRangeGyroscope(uint8_t range);
 
-	void setMotionDetectionThresold(uint8_t value);
-	uint8_t getMotionDetectionThresold();
+        uint8_t getRangeGyroscope();
 
-	void setTEMP_FIFO_EN(uint8_t value);
-	uint8_t getTEMP_FIFO_EN();
+        void getAccelerations(int16_t *ax, int16_t *ay, int16_t *az);
 
-	void setXG_FIFO_EN(uint8_t value);
-	uint8_t getXG_FIFO_EN();
+        int16_t getAccelerationX();
 
-	void setYG_FIFO_EN(uint8_t value);
-	uint8_t getYG_FIFO_EN();
+        int16_t getAccelerationY();
 
-	void setZG_FIFO_EN(uint8_t value);
-	uint8_t getZG_FIFO_EN();
+        int16_t getAccelerationZ();
 
-	void setACCEL_FIFO_EN(uint8_t value);
-	uint8_t getACCEL_FIFO_EN();
+        void getAngularVelocities(int16_t *gx, int16_t *gy, int16_t *gz);
 
-	void setSLV2_FIFO_EN(uint8_t value);
-	uint8_t getSLV2_FIFO_EN();
+        int16_t getAngularVelocityX();
 
-	void setSLV1_FIFO_EN(uint8_t value);
-	uint8_t getSLV1_FIFO_EN();
+        int16_t getAngularVelocityY();
 
-	void setSLV0_FIFO_EN(uint8_t value);
-	uint8_t getSLV0_FIFO_EN();
+        int16_t getAngularVelocityZ();
 
-	uint16_t getFIFO_Count();
+        void getMotions6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx,
+                         int16_t *gy, int16_t *gz);
 
-	void setFIFO_Enable(uint8_t value);
-	uint8_t getFIFO_Enable();
+        int16_t getTemperature();
 
-	void getFIFO_Data(uint8_t *data, uint8_t length);
+        void setDLPFMode(uint8_t mode);
 
-	void setFIFO_Reset(uint8_t value);
-	uint8_t getFIFO_Reset();
+        uint8_t getDLPFMode();
 
-private:
-	BBB_I2C i2c;
-	uint8_t DEV_ADD;
-};
+        void setSampleRate(uint8_t rate);
+
+        uint8_t getSampleRate();
+
+        void setMotionDetectionThresold(uint8_t value);
+
+        uint8_t getMotionDetectionThresold();
+
+        void setTEMP_FIFO_EN(uint8_t value);
+
+        uint8_t getTEMP_FIFO_EN();
+
+        void setXG_FIFO_EN(uint8_t value);
+
+        uint8_t getXG_FIFO_EN();
+
+        void setYG_FIFO_EN(uint8_t value);
+
+        uint8_t getYG_FIFO_EN();
+
+        void setZG_FIFO_EN(uint8_t value);
+
+        uint8_t getZG_FIFO_EN();
+
+        void setACCEL_FIFO_EN(uint8_t value);
+
+        uint8_t getACCEL_FIFO_EN();
+
+        void setSLV2_FIFO_EN(uint8_t value);
+
+        uint8_t getSLV2_FIFO_EN();
+
+        void setSLV1_FIFO_EN(uint8_t value);
+
+        uint8_t getSLV1_FIFO_EN();
+
+        void setSLV0_FIFO_EN(uint8_t value);
+
+        uint8_t getSLV0_FIFO_EN();
+
+        uint16_t getFIFO_Count();
+
+        void setFIFO_Enable(uint8_t value);
+
+        uint8_t getFIFO_Enable();
+
+        void getFIFO_Data(uint8_t *data, uint8_t length);
+
+        void setFIFO_Reset(uint8_t value);
+
+        uint8_t getFIFO_Reset();
+
+    private:
+        BBB_I2C *i2c;
+        uint8_t DEV_ADD;
+    };
 }  // namespace cacaosd_mpu6050
 #endif	/* MPU6050_H */
 

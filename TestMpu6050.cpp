@@ -14,34 +14,37 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
-#include "MPU6050.h"
+#include "AllDevices.h"
 
 using namespace cacaosd_bbb_i2c;
 using namespace cacaosd_mpu6050;
 
+int ctrl;
+
 int main() {
 
-	// First way
-	BBB_I2C i2c(0x68, 1);
-	MPU6050 mpu(i2c);
+    ctrl = 1;
+    signal(SIGINT, signal_handler);
 
-	float k = 16000;
+    BBB_I2C *i2c = new BBB_I2C(0x69, 2);
+    i2c->openConnection();
 
-	//Second way
-	//MPU6050 mpu;
+    MPU6050 *mpu6050 = new MPU6050(i2c);
+    mpu6050->init();
 
-	mpu.init();
+    float k = 16000;
 
-	while (true) {
-		printf("Accel X: %.3f\n", (float) mpu.getAccelerationX() / k);
-		printf("Accel Y: %.3f\n", (float) mpu.getAccelerationY() / k);
-		printf("Accel Z: %.3f\n", (float) mpu.getAccelerationZ() / k);
-		printf("---------------\n");
+    while (ctrl) {
+        std::cout << "MPU6050" << std::endl;
+        std::cout << "Accel X: " << (float) mpu6050->getAccelerationX() / k << std::endl;
+        std::cout << "Accel Y: " << (float) mpu6050->getAccelerationY() / k << std::endl;
+        std::cout << "Accel Z: " << (float) mpu6050->getAccelerationZ() / k << std::endl;
+        std::cout << "----------------------" << std::endl;
+        usleep(200000);
+    }
 
-		usleep(200000);
-	}
+    delete i2c, mpu6050;
 
-	return 0;
+    return 0;
 }
 

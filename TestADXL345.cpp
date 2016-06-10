@@ -15,25 +15,36 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include "ADXL345.h"
+#include "AllDevices.h"
+
 using namespace cacaosd_bbb_i2c;
 using namespace cacaosd_adxl345;
 
-int main(int argc, char **argv) {
+int ctrl;
 
-	BBB_I2C i2c;
-	ADXL345 adxl(i2c);
-	adxl.initialize();
+int main() {
 
-	while (true) {
-		printf("Raw Accel X: %d\n", adxl.getAccelerationX());
-		printf("Raw Accel Y: %d\n", adxl.getAccelerationY());
-		printf("Raw Accel Z: %d\n", adxl.getAccelerationZ());
-		printf("-------------------\n");
+    ctrl = 1;
+    signal(SIGINT, signal_handler);
 
-		usleep(200000);
-	}
-	return 0;
+    BBB_I2C *i2c = new BBB_I2C(ADXL345_DEFAULT_ADDRESS, 2);
+    i2c->openConnection();
+
+    ADXL345 *adxl345 = new ADXL345(i2c);
+    adxl345->initialize();
+
+    while (ctrl) {
+        std::cout << "ADXL345" << std::endl;
+        std::cout << "Raw Accel X: " << adxl345->getAccelerationX() << std::endl;
+        std::cout << "Raw Accel Y: " << adxl345->getAccelerationY() << std::endl;
+        std::cout << "Raw Accel Z: " << adxl345->getAccelerationZ() << std::endl;
+        std::cout << "----------------------" << std::endl;
+
+        usleep(200000);
+    }
+
+    delete i2c, adxl345;
+
+    return 0;
 }
 

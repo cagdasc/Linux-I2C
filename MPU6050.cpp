@@ -16,21 +16,17 @@
  */
 
 #include "MPU6050.h"
+
 namespace cacaosd_mpu6050 {
 
-MPU6050::MPU6050(uint8_t DEV_ADD) :
-		i2c(DEV_ADD, I2C_BUS) {
-	this->DEV_ADD = DEV_ADD;
-}
 
-MPU6050::MPU6050(BBB_I2C &i2c) :
-		DEV_ADD(DEF_DEV_ADD) {
-	this->i2c = i2c;
-	this->i2c.setDEV_ADD(DEV_ADD);
-}
+    MPU6050::MPU6050(BBB_I2C *i2c) {
+        this->i2c = i2c;
+    }
 
-MPU6050::~MPU6050() {
-}
+    MPU6050::~MPU6050() {
+        delete i2c;
+    }
 
 /** Power on and prepare for general usage.
  * This will activate the device and take it out of sleep mode (which must be done
@@ -39,50 +35,50 @@ MPU6050::~MPU6050() {
  * the clock source to use the X Gyro for reference, which is slightly better than
  * the default internal clock source.
  */
-void MPU6050::init() {
-	setSleepMode(false);
-	setRangeAcceleration(0);
-	setRangeGyroscope(0);
-}
+    void MPU6050::init() {
+        setRangeAcceleration(0);
+        setRangeGyroscope(0);
+        setSleepMode(false);
+    }
 
 /** Trigger a full device reset.
  * A small delay of ~50ms may be desirable after triggering a reset.
  * @see PWR_MGMT_1
  * @see DEV_RESET_BIT
  */
-void MPU6050::reset() {
-	i2c.writeBit(PWR_MGMT_1, 1, DEV_RESET_BIT);
-}
+    void MPU6050::reset() {
+        i2c->writeBit(PWR_MGMT_1, 1, DEV_RESET_BIT);
+    }
 
 /** Set device address.
  * @param DEV_ADD device address
  * @see DEF_DEV_ADD
  */
-void MPU6050::setDeviceAddress(uint8_t DEV_ADD) {
-	this->DEV_ADD = DEV_ADD;
-}
+    void MPU6050::setDeviceAddress(uint8_t DEV_ADD) {
+        this->DEV_ADD = DEV_ADD;
+    }
 
 /** Get device address.
  * @return device address
  */
-uint8_t MPU6050::getDeviceAddress() {
-	return this->DEV_ADD;
-}
+    uint8_t MPU6050::getDeviceAddress() {
+        return this->DEV_ADD;
+    }
 
 /** Set sleep mode status.
  * @param enabled New sleep mode enabled status
  * @see getSleepEnabled()
  * @see PWR_MGMT_1
  */
-void MPU6050::setSleepMode(bool mode) {
-	int8_t byte = i2c.readByte(PWR_MGMT_1);
-	if (mode) {
-		byte |= 64;
-	} else {
-		byte &= ~64;
-	}
-	i2c.writeByte(PWR_MGMT_1, byte);
-}
+    void MPU6050::setSleepMode(bool mode) {
+        int8_t byte = i2c->readByte(PWR_MGMT_1);
+        if (mode) {
+            byte |= 64;
+        } else {
+            byte &= ~64;
+        }
+        i2c->writeByte(PWR_MGMT_1, byte);
+    }
 
 /** Get sleep mode status.
  * Setting the SLEEP bit in the register puts the device into very low power
@@ -94,37 +90,37 @@ void MPU6050::setSleepMode(bool mode) {
  * @return Current sleep mode enabled status
  * @see PWR_MGMT_1
  */
-bool MPU6050::getSleepMode() {
-	int8_t byte = i2c.readByte(PWR_MGMT_1);
-	byte >>= 6;
-	byte %= 2;
-	if (byte == 1) {
-		return true;
-	} else {
-		return false;
-	}
-}
+    bool MPU6050::getSleepMode() {
+        int8_t byte = i2c->readByte(PWR_MGMT_1);
+        byte >>= 6;
+        byte %= 2;
+        if (byte == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 /** Set full-scale accelerometer range.
  * @param range New full-scale accelerometer range setting
  * @see getRangeAcceleration()
  */
-void MPU6050::setRangeAcceleration(uint8_t range) {
-	uint8_t afs;
-	afs = i2c.readByte(ACCEL_CONFIG);
-	if (range == 0) {
-		afs &= ~24;
-	} else if (range == 1) {
-		afs |= 8;
-		afs &= ~16;
-	} else if (range == 2) {
-		afs &= ~8;
-		afs |= 16;
-	} else {
-		afs |= 24;
-	}
-	i2c.writeByte(ACCEL_CONFIG, afs);
-}
+    void MPU6050::setRangeAcceleration(uint8_t range) {
+        uint8_t afs;
+        afs = i2c->readByte(ACCEL_CONFIG);
+        if (range == 0) {
+            afs &= ~24;
+        } else if (range == 1) {
+            afs |= 8;
+            afs &= ~16;
+        } else if (range == 2) {
+            afs &= ~8;
+            afs |= 16;
+        } else {
+            afs |= 24;
+        }
+        i2c->writeByte(ACCEL_CONFIG, afs);
+    }
 
 /** Get full-scale accelerometer range.
  * The FS_SEL parameter allows setting the full-scale range of the accelerometer
@@ -140,35 +136,35 @@ void MPU6050::setRangeAcceleration(uint8_t range) {
  * @return Current full-scale accelerometer range setting
  * @see ACCEL_CONFIG
  */
-uint8_t MPU6050::getRangeAcceleration() {
-	uint8_t afs;
-	afs = i2c.readByte(ACCEL_CONFIG);
-	afs >>= 3;
-	afs %= 4;
-	return afs;
-}
+    uint8_t MPU6050::getRangeAcceleration() {
+        uint8_t afs;
+        afs = i2c->readByte(ACCEL_CONFIG);
+        afs >>= 3;
+        afs %= 4;
+        return afs;
+    }
 
 /** Set full-scale gyroscope range.
  * @param range New full-scale gyroscope range value
  * @see getRangeGyroscope()
  * @see GYRO_CONFIG
  */
-void MPU6050::setRangeGyroscope(uint8_t range) {
-	uint8_t fs;
-	fs = i2c.readByte(GYRO_CONFIG);
-	if (range == 0) {
-		fs &= ~24;
-	} else if (range == 1) {
-		fs |= 8;
-		fs &= ~16;
-	} else if (range == 2) {
-		fs &= ~8;
-		fs |= 16;
-	} else {
-		fs |= 24;
-	}
-	i2c.writeByte(GYRO_CONFIG, fs);
-}
+    void MPU6050::setRangeGyroscope(uint8_t range) {
+        uint8_t fs;
+        fs = i2c->readByte(GYRO_CONFIG);
+        if (range == 0) {
+            fs &= ~24;
+        } else if (range == 1) {
+            fs |= 8;
+            fs &= ~16;
+        } else if (range == 2) {
+            fs &= ~8;
+            fs |= 16;
+        } else {
+            fs |= 24;
+        }
+        i2c->writeByte(GYRO_CONFIG, fs);
+    }
 
 /** Get full-scale gyroscope range.
  * The FS_SEL parameter allows setting the full-scale range of the gyro sensors,
@@ -184,104 +180,104 @@ void MPU6050::setRangeGyroscope(uint8_t range) {
  * @return Current full-scale gyroscope range setting
  * @see GYRO_CONFIG
  */
-uint8_t MPU6050::getRangeGyroscope() {
-	uint8_t fs;
-	fs = i2c.readByte(GYRO_CONFIG);
-	fs >>= 3;
-	fs %= 4;
-	return fs;
-}
+    uint8_t MPU6050::getRangeGyroscope() {
+        uint8_t fs;
+        fs = i2c->readByte(GYRO_CONFIG);
+        fs >>= 3;
+        fs %= 4;
+        return fs;
+    }
 
-void MPU6050::getAccelerations(int16_t *ax, int16_t *ay, int16_t *az) {
+    void MPU6050::getAccelerations(int16_t *ax, int16_t *ay, int16_t *az) {
 
-	*ax = i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
-	*ay = i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
-	*az = i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+        *ax = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+        *ay = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+        *az = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 
-}
+    }
 
-int16_t MPU6050::getAccelerationX() {
-	return i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
-}
+    int16_t MPU6050::getAccelerationX() {
+        return i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+    }
 
-int16_t MPU6050::getAccelerationY() {
-	return i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
-}
+    int16_t MPU6050::getAccelerationY() {
+        return i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+    }
 
-int16_t MPU6050::getAccelerationZ() {
-	return i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
-}
+    int16_t MPU6050::getAccelerationZ() {
+        return i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+    }
 
-void MPU6050::getAngularVelocities(int16_t* gx, int16_t* gy, int16_t* gz) {
+    void MPU6050::getAngularVelocities(int16_t *gx, int16_t *gy, int16_t *gz) {
 
-	*gx = i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
-	*gy = i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
-	*gz = i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
+        *gx = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+        *gy = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+        *gz = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
 
-}
+    }
 
-int16_t MPU6050::getAngularVelocityX() {
-	return i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
-}
+    int16_t MPU6050::getAngularVelocityX() {
+        return i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+    }
 
-int16_t MPU6050::getAngularVelocityY() {
-	return i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
-}
+    int16_t MPU6050::getAngularVelocityY() {
+        return i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+    }
 
-int16_t MPU6050::getAngularVelocityZ() {
-	return i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
-}
+    int16_t MPU6050::getAngularVelocityZ() {
+        return i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
+    }
 
-int16_t MPU6050::getTemperature() {
-	return i2c.readWord(TEMP_OUT_H, TEMP_OUT_L);
-}
+    int16_t MPU6050::getTemperature() {
+        return i2c->readWord(TEMP_OUT_H, TEMP_OUT_L);
+    }
 
-void MPU6050::getMotions6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
-		int16_t* gy, int16_t* gz) {
+    void MPU6050::getMotions6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx,
+                              int16_t *gy, int16_t *gz) {
 
-	*ax = i2c.readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
-	*ay = i2c.readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
-	*az = i2c.readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
+        *ax = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+        *ay = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+        *az = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 
-	*gx = i2c.readWord(GYRO_XOUT_H, GYRO_XOUT_L);
-	*gy = i2c.readWord(GYRO_YOUT_H, GYRO_YOUT_L);
-	*gz = i2c.readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
+        *gx = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+        *gy = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+        *gz = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
 
-}
+    }
 
 /** Set digital low-pass filter configuration.
  * @param mode New DLFP configuration setting
  * @see getDLPFMode()
  * @see CONFIG
  */
-void MPU6050::setDLPFMode(uint8_t mode) {
-	uint8_t config = i2c.readByte(CONFIG);
-	if (mode == 0) {
-		config = config & ~7;
-	} else if (mode == 1) {
-		config |= 1;
-		config &= ~6;
-	} else if (mode == 2) {
-		config |= 2;
-		config &= ~5;
-	} else if (mode == 3) {
-		config |= 3;
-		config &= ~4;
-	} else if (mode == 4) {
-		config |= 4;
-		config &= ~3;
-	} else if (mode == 5) {
-		config |= 5;
-		config &= ~2;
-	} else if (mode == 6) {
-		config |= 6;
-		config &= ~1;
-	} else if (mode == 7) {
-		config |= 7;
-	}
+    void MPU6050::setDLPFMode(uint8_t mode) {
+        uint8_t config = i2c->readByte(CONFIG);
+        if (mode == 0) {
+            config = config & ~7;
+        } else if (mode == 1) {
+            config |= 1;
+            config &= ~6;
+        } else if (mode == 2) {
+            config |= 2;
+            config &= ~5;
+        } else if (mode == 3) {
+            config |= 3;
+            config &= ~4;
+        } else if (mode == 4) {
+            config |= 4;
+            config &= ~3;
+        } else if (mode == 5) {
+            config |= 5;
+            config &= ~2;
+        } else if (mode == 6) {
+            config |= 6;
+            config &= ~1;
+        } else if (mode == 7) {
+            config |= 7;
+        }
 
-	i2c.writeByte(CONFIG, config);
-}
+        i2c->writeByte(CONFIG, config);
+    }
 
 /** Get digital low-pass filter configuration.
  * The DLPF_CFG parameter sets the digital low pass filter configuration. It
@@ -309,19 +305,19 @@ void MPU6050::setDLPFMode(uint8_t mode) {
  * @return DLFP configuration
  * @see CONFIG
  */
-uint8_t MPU6050::getDLPFMode() {
-	uint8_t config = i2c.readByte(CONFIG);
-	return config % 8;
-}
+    uint8_t MPU6050::getDLPFMode() {
+        uint8_t config = i2c->readByte(CONFIG);
+        return config % 8;
+    }
 
 /** Set gyroscope sample rate divider.
  * @param rate New sample rate divider
  * @see getSampleRate()
  * @see SMPLRT_DIV
  */
-void MPU6050::setSampleRate(uint8_t rate) {
-	i2c.writeByte(SMPLRT_DIV, rate);
-}
+    void MPU6050::setSampleRate(uint8_t rate) {
+        i2c->writeByte(SMPLRT_DIV, rate);
+    }
 
 /** Get gyroscope output rate divider.
  * The sensor register output, FIFO output, DMP sampling, Motion detection, Zero
@@ -344,104 +340,104 @@ void MPU6050::setSampleRate(uint8_t rate) {
  * @return Current sample rate
  * @see SMPLRT_DIV
  */
-uint8_t MPU6050::getSampleRate() {
-	return i2c.readByte(SMPLRT_DIV);
-}
+    uint8_t MPU6050::getSampleRate() {
+        return i2c->readByte(SMPLRT_DIV);
+    }
 
-void MPU6050::setMotionDetectionThresold(uint8_t value) {
-	i2c.writeByte(MOT_THR, value);
-}
+    void MPU6050::setMotionDetectionThresold(uint8_t value) {
+        i2c->writeByte(MOT_THR, value);
+    }
 
-uint8_t MPU6050::getMotionDetectionThresold() {
-	return i2c.readByte(MOT_THR);
-}
+    uint8_t MPU6050::getMotionDetectionThresold() {
+        return i2c->readByte(MOT_THR);
+    }
 
-void MPU6050::setTEMP_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, TEMP_FIFO_EN_BIT);
-}
+    void MPU6050::setTEMP_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, TEMP_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getTEMP_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, TEMP_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getTEMP_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, TEMP_FIFO_EN_BIT);
+    }
 
-void MPU6050::setXG_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, XG_FIFO_EN_BIT);
-}
+    void MPU6050::setXG_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, XG_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getXG_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, XG_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getXG_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, XG_FIFO_EN_BIT);
+    }
 
-void MPU6050::setYG_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, YG_FIFO_EN_BIT);
-}
+    void MPU6050::setYG_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, YG_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getYG_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, YG_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getYG_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, YG_FIFO_EN_BIT);
+    }
 
-void MPU6050::setZG_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, ZG_FIFO_EN_BIT);
-}
+    void MPU6050::setZG_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, ZG_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getZG_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, ZG_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getZG_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, ZG_FIFO_EN_BIT);
+    }
 
-void MPU6050::setACCEL_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, ACCEL_FIFO_EN_BIT);
-}
+    void MPU6050::setACCEL_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, ACCEL_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getACCEL_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, ACCEL_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getACCEL_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, ACCEL_FIFO_EN_BIT);
+    }
 
-void MPU6050::setSLV2_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, SLV2_FIFO_EN_BIT);
-}
+    void MPU6050::setSLV2_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, SLV2_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getSLV2_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, SLV2_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getSLV2_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, SLV2_FIFO_EN_BIT);
+    }
 
-void MPU6050::setSLV1_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, SLV1_FIFO_EN_BIT);
-}
+    void MPU6050::setSLV1_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, SLV1_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getSLV1_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, SLV1_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getSLV1_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, SLV1_FIFO_EN_BIT);
+    }
 
-void MPU6050::setSLV0_FIFO_EN(uint8_t value) {
-	i2c.writeBit(FIFO_EN, value, SLV0_FIFO_EN_BIT);
-}
+    void MPU6050::setSLV0_FIFO_EN(uint8_t value) {
+        i2c->writeBit(FIFO_EN, value, SLV0_FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getSLV0_FIFO_EN() {
-	return i2c.readBit(FIFO_EN, SLV0_FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getSLV0_FIFO_EN() {
+        return i2c->readBit(FIFO_EN, SLV0_FIFO_EN_BIT);
+    }
 
-uint16_t MPU6050::getFIFO_Count() {
-	return i2c.readWord(FIFO_COUNTH, FIFO_COUNTL);
-}
+    uint16_t MPU6050::getFIFO_Count() {
+        return i2c->readWord(FIFO_COUNTH, FIFO_COUNTL);
+    }
 
-void MPU6050::setFIFO_Enable(uint8_t value) {
-	i2c.writeBit(USER_CTRL, value, FIFO_EN_BIT);
-}
+    void MPU6050::setFIFO_Enable(uint8_t value) {
+        i2c->writeBit(USER_CTRL, value, FIFO_EN_BIT);
+    }
 
-uint8_t MPU6050::getFIFO_Enable() {
-	return i2c.readBit(USER_CTRL, FIFO_EN_BIT);
-}
+    uint8_t MPU6050::getFIFO_Enable() {
+        return i2c->readBit(USER_CTRL, FIFO_EN_BIT);
+    }
 
-void MPU6050::getFIFO_Data(uint8_t *data, uint8_t length) {
-	i2c.readByteBuffer(FIFO_R_W, data, length);
-}
+    void MPU6050::getFIFO_Data(uint8_t *data, uint8_t length) {
+        i2c->readByteBuffer(FIFO_R_W, data, length);
+    }
 
-void MPU6050::setFIFO_Reset(uint8_t value) {
-	i2c.writeBit(USER_CTRL, value, FIFO_RESET_BIT);
-}
+    void MPU6050::setFIFO_Reset(uint8_t value) {
+        i2c->writeBit(USER_CTRL, value, FIFO_RESET_BIT);
+    }
 
-uint8_t MPU6050::getFIFO_Reset() {
-	return i2c.readBit(USER_CTRL, FIFO_RESET_BIT);
-}
+    uint8_t MPU6050::getFIFO_Reset() {
+        return i2c->readBit(USER_CTRL, FIFO_RESET_BIT);
+    }
 
 }  // namespace cacaosd_mpu6050
