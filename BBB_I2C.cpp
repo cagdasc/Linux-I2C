@@ -20,25 +20,27 @@
 namespace cacaosd_bbb_i2c {
 
 /**
- * @funtion BBB_I2C(uint8_t busAddr)
- * @param busAddr I2C Bus address.
+ * @funtion BBB_I2C(uint8_t bus_addr)
+ * @param bus_addr I2C Bus address.
  */
     BBB_I2C::BBB_I2C(uint8_t busAddr) {
-        this->busAddr = busAddr;
+        this->connection_open = false;
+        this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
-        sprintf(path, "/dev/i2c-%d", this->busAddr);
+        sprintf(path, "/dev/i2c-%d", this->bus_addr);
     }
 
 /**
- * @funtion BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr)
- * @param DEV_ADD Device Address
- * @param busAddr I2C Bus address.
+ * @funtion BBB_I2C(uint8_t dev_addr, uint8_t bus_addr)
+ * @param dev_addr Device Address
+ * @param bus_addr I2C Bus address.
  */
-    BBB_I2C::BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr) {
-        this->busAddr = busAddr;
+    BBB_I2C::BBB_I2C(uint8_t dev_addr, uint8_t busAddr) {
+        this->connection_open = false;
+        this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
-        this->DEV_ADD = DEV_ADD;
-        sprintf(path, "/dev/i2c-%d", this->busAddr);
+        this->dev_addr = dev_addr;
+        sprintf(path, "/dev/i2c-%d", this->bus_addr);
     }
 
 /** Default Destructor
@@ -47,28 +49,43 @@ namespace cacaosd_bbb_i2c {
  */
     BBB_I2C::~BBB_I2C() {
         free(path);
-        close(this->file_descriptor);
+        this->closeConnection();
     }
 
 /**
- * @funtion setBusAddress(uint8_t busAddr)
- * @param busAddr I2C Bus address.
+ * @funtion setBusAddress(uint8_t bus_addr)
+ * @param bus_addr I2C Bus address.
  */
     void BBB_I2C::setBusAddress(uint8_t busAddr) {
         free(path);
-        this->busAddr = busAddr;
+        this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
-        sprintf(path, "/dev/i2c-%d", this->busAddr);
+        sprintf(path, "/dev/i2c-%d", this->bus_addr);
     }
 
 /**
- * @funtion setDEV_ADD(uint8_t DEV_ADD)
- * @param DEV_ADD Device Address
+ * @funtion getBusAddress()
+ * @return bus_addr I2C Bus address.
  */
-    void BBB_I2C::setDEV_ADD(uint8_t DEV_ADD) {
-        this->DEV_ADD = DEV_ADD;
+    uint8_t BBB_I2C::getBusAddress() {
+        return this->bus_addr;
     }
 
+/**
+ * @funtion setDevAddr(uint8_t dev_addr)
+ * @param dev_addr Device Address
+ */
+    void BBB_I2C::setDevAddr(uint8_t dev_addr) {
+        this->dev_addr = dev_addr;
+    }
+
+/**
+ * @funtion getDevAddr()
+ * @return dev_addr Device Address
+ */
+    uint8_t BBB_I2C::getDevAddr() {
+        return this->dev_addr;
+    }
 /**
  * @function openConnection()
  * @return file type of int
@@ -77,20 +94,32 @@ namespace cacaosd_bbb_i2c {
         int file;
 
         if ((file = open(path, O_RDWR)) < 0) {
-            msg_error("%s do not open. Address %d.", path, DEV_ADD);
+            msg_error("%s do not open. Address %d.", path, dev_addr);
             exit(1);
         }
 
-        if (ioctl(file, I2C_SLAVE, DEV_ADD) < 0) {
-            msg_error("Can not join I2C Bus. Address %d.", DEV_ADD);
+        if (ioctl(file, I2C_SLAVE, dev_addr) < 0) {
+            msg_error("Can not join I2C Bus. Address %d.", dev_addr);
             exit(1);
         }
+
+        if (file < 0) {
+            this->connection_open = false;
+            msg_error("Connection was not established.");
+            exit(1);
+        }
+        this->connection_open = true;
         this->file_descriptor = file;
     }
 
+    void BBB_I2C::closeConnection() {
+        this->connection_open = false;
+        close(this->file_descriptor);
+    }
+
 /**
- * @function writeBit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t data, int bitNum)
- * @param DEV_ADD Device Address.
+ * @function writeBit(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t data, int bitNum)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param data Writing data.
  * @param bitNum Bit Number for writing.
@@ -103,7 +132,7 @@ namespace cacaosd_bbb_i2c {
         } else if (data == 1) {
             temp = temp | (1 << bitNum);
         } else {
-            msg_warning("Value must be 0 or 1! --> Address %d.", DEV_ADD);
+            msg_warning("Value must be 0 or 1! --> Address %d.", dev_addr);
         }
 
         writeByte(DATA_REGADD, temp);
@@ -111,8 +140,8 @@ namespace cacaosd_bbb_i2c {
     }
 
 /**
- * @function writeBits(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t data, int length, int startBit)
- * @param DEV_ADD Device Address.
+ * @function writeBits(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t data, int length, int startBit)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param length Bits length.
  * @param startBit Starting point of the data.
@@ -139,8 +168,8 @@ namespace cacaosd_bbb_i2c {
     }
 
 /**
- * @function writeByte(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t data)
- * @param DEV_ADD Device Address.
+ * @function writeByte(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t data)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param data Writing data.
  * @return void.
@@ -153,14 +182,14 @@ namespace cacaosd_bbb_i2c {
         buffer[1] = data;
 
         if (write(this->file_descriptor, buffer, 2) != 2) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function writeByteBuffer(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
- * @param DEV_ADD Device Address.
+ * @function writeByteBuffer(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param *data Data storage array.
  * @param length Array length.
@@ -173,18 +202,18 @@ namespace cacaosd_bbb_i2c {
         buffer[0] = DATA_REGADD;
 
         if (write(this->file_descriptor, buffer, 1) != 1) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
         if (write(this->file_descriptor, data, length) != length) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function writeByteArduino(uint8_t DEV_ADD, int8_t data)
- * @param DEV_ADD Arduino Device Address.
+ * @function writeByteArduino(uint8_t dev_addr, int8_t data)
+ * @param dev_addr Arduino Device Address.
  * @param data Writing data.
  * @return void.
  */
@@ -194,14 +223,14 @@ namespace cacaosd_bbb_i2c {
         buffer[0] = data;
 
         if (write(this->file_descriptor, buffer, 1) != 1) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function writeByteBufferArduino(uint8_t DEV_ADD, uint8_t *data, uint8_t length)
- * @param DEV_ADD Arduino Device Address.
+ * @function writeByteBufferArduino(uint8_t dev_addr, uint8_t *data, uint8_t length)
+ * @param dev_addr Arduino Device Address.
  * @param *data Data storage array.
  * @param length Array length.
  * @return void.
@@ -209,14 +238,14 @@ namespace cacaosd_bbb_i2c {
     void BBB_I2C::writeByteBufferArduino(uint8_t *data, uint8_t length) {
 
         if (write(this->file_descriptor, data, length) != length) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function readBit(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t bitNum)
- * @param DEV_ADD Device Address.
+ * @function readBit(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t bitNum)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param bitNum Bit Number for reading.
  * @return uint8_t bit value.
@@ -228,8 +257,8 @@ namespace cacaosd_bbb_i2c {
     }
 
 /**
- * @function readBits(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t length, uint8_t startBit)
- * @param DEV_ADD Device Address.
+ * @function readBits(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t length, uint8_t startBit)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param length Bits length.
  * @param startBit Starting point of the value.
@@ -242,8 +271,8 @@ namespace cacaosd_bbb_i2c {
     }
 
 /**
- * @function readByte(uint8_t DEV_ADD, uint8_t DATA_REGADD)
- * @param DEV_ADD Device Address.
+ * @function readByte(uint8_t dev_addr, uint8_t DATA_REGADD)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @return uint8_t bit value.
  */
@@ -253,21 +282,21 @@ namespace cacaosd_bbb_i2c {
         buffer[0] = DATA_REGADD;
 
         if (write(this->file_descriptor, buffer, 1) != 1) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
         uint8_t value[1];
 
         if (read(this->file_descriptor, value, 1) != 1) {
-            msg_error("Can not read data. Address %d.", DEV_ADD);
+            msg_error("Can not read data. Address %d.", dev_addr);
         }
 
         return value[0];
     }
 
 /**
- * @function readByteBuffer(uint8_t DEV_ADD, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
- * @param DEV_ADD Device Address.
+ * @function readByteBuffer(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
+ * @param dev_addr Device Address.
  * @param DATA_REGADD Data Register Address.
  * @param *data Data storage array.
  * @param length Array length.
@@ -280,18 +309,18 @@ namespace cacaosd_bbb_i2c {
         buffer[0] = DATA_REGADD;
 
         if (write(this->file_descriptor, buffer, 1) != 1) {
-            msg_error("Can not write data. Address %d.", DEV_ADD);
+            msg_error("Can not write data. Address %d.", dev_addr);
         }
 
         if (read(this->file_descriptor, data, length) != length) {
-            msg_error("Can not read data. Address %d.", DEV_ADD);
+            msg_error("Can not read data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function readByteBufferArduino(uint8_t DEV_ADD, uint8_t* data, uint8_t length)
- * @param DEV_ADD Arduino Device Address.
+ * @function readByteBufferArduino(uint8_t dev_addr, uint8_t* data, uint8_t length)
+ * @param dev_addr Arduino Device Address.
  * @param *data Data storage array.
  * @param length Array length.
  * @return void.
@@ -299,14 +328,14 @@ namespace cacaosd_bbb_i2c {
     void BBB_I2C::readByteBufferArduino(uint8_t *data, uint8_t length) {
 
         if (read(this->file_descriptor, data, length) != length) {
-            msg_error("Can not read data. Address %d.", DEV_ADD);
+            msg_error("Can not read data. Address %d.", dev_addr);
         }
 
     }
 
 /**
- * @function readWord(uint8_t DEV_ADD, uint8_t MSB, uint8_t LSB)
- * @param DEV_ADD Arduino Device Address.
+ * @function readWord(uint8_t dev_addr, uint8_t MSB, uint8_t LSB)
+ * @param dev_addr Arduino Device Address.
  * @param MSB 16-bit values Most Significant Byte Address.
  * @param LSB 16-bit values Less Significant Byte Address..
  * @return void.

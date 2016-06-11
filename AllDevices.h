@@ -31,4 +31,4 @@ void signal_handler(int signal) {
     exit(signal);
 }
 
-#endif ALLDEVICES_H
+#endif /*ALLDEVICES_H*/

@@ -16,7 +16,7 @@
  */
 
 #ifndef HMC5883L_H
-#define    HMC5883L_H
+#define HMC5883L_H
 
 #include "BBB_I2C.h"
 

@@ -29,8 +29,8 @@
 
 #define PATH_SIZE 15
 
-#define msg_error(M, ...) printf("[ERROR]:"M"\n",##__VA_ARGS__);
-#define msg_warning(M, ...) printf("[WARNING]:"M"\n",##__VA_ARGS__);
+#define msg_error(M, ...) printf("[ERROR]:" M "\n", ##__VA_ARGS__);
+#define msg_warning(M, ...) printf("[WARNING]:" M "\n", ##__VA_ARGS__);
 
 namespace cacaosd_bbb_i2c {
 
@@ -45,9 +45,20 @@ namespace cacaosd_bbb_i2c {
 
         void openConnection();
 
+        void closeConnection();
+
+
+        bool isConnectionOpen() const {
+            return connection_open;
+        }
+
         void setBusAddress(uint8_t busAddr);
 
         uint8_t getBusAddress();
+
+        void setDevAddr(uint8_t DEV_ADD);
+
+        uint8_t getDevAddr();
 
         void writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum);
 
@@ -74,13 +85,14 @@ namespace cacaosd_bbb_i2c {
 
         int16_t readWord(uint8_t MSB, uint8_t LSB);
 
-        void setDEV_ADD(uint8_t DEV_ADD);
+
 
     private:
         int file_descriptor;
-        uint8_t busAddr;
-        uint8_t DEV_ADD;
+        uint8_t bus_addr;
+        uint8_t dev_addr;
         char *path;
+        bool connection_open;
 
     };
 }  // namespace cacaosd_bbb_i2c

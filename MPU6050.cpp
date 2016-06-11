@@ -51,7 +51,7 @@ namespace cacaosd_mpu6050 {
     }
 
 /** Set device address.
- * @param DEV_ADD device address
+ * @param dev_addr device address
  * @see DEF_DEV_ADD
  */
     void MPU6050::setDeviceAddress(uint8_t DEV_ADD) {

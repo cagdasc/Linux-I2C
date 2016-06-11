@@ -41,11 +41,23 @@ int main() {
     ADXL345 *adxl345 = new ADXL345(i2c2);
 
     //Initialize devices
-    mpu6050->init();
+    if (i2c0->isConnectionOpen()) {
+        mpu6050->init();
+    } else {
+        exit(1);
+    }
 
-    hmc5883L->initialize();
+    if (i2c1->isConnectionOpen()) {
+        hmc5883L->initialize();
+    } else {
+        exit(1);
+    }
 
-    adxl345->initialize();
+    if (i2c2->isConnectionOpen()) {
+        adxl345->initialize();
+    } else {
+        exit(1);
+    }
 
     float k = 16000;
 
