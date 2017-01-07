@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.5)
-project(BeagleBoneBlack_I2C)
+cmake_minimum_required(VERSION 2.8)
+project(Linux-I2C)
 
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
     set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
@@ -11,27 +11,27 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 set(ADXL_SRC_FILES
         ADXL345.cpp
         ADXL345.h
-        BBB_I2C.cpp
-        BBB_I2C.h
+        I2cPort.cpp
+        I2cPort.h
         TestADXL345.cpp)
 
 set(MPU6050_SRC_FILES
-        BBB_I2C.cpp
-        BBB_I2C.h
+        I2cPort.cpp
+        I2cPort.h
         MPU6050.cpp
         MPU6050.h
         TestMpu6050.cpp)
 
 set(HMC5883L_SRC_FILES
-        BBB_I2C.cpp
-        BBB_I2C.h
+        I2cPort.cpp
+        I2cPort.h
         HMC5883L.cpp
         HMC5883L.h
         TestHMC5883L.cpp)
 
 set(ALL_DEV_SRC_FILES
-        BBB_I2C.cpp
-        BBB_I2C.h
+        I2cPort.cpp
+        I2cPort.h
         ADXL345.cpp
         ADXL345.h
         HMC5883L.cpp

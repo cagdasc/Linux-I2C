@@ -18,7 +18,7 @@
 #ifndef MPU6050_H
 #define    MPU6050_H
 
-#include "BBB_I2C.h"
+#include "I2cPort.h"
 
 #define SELF_TEST_X 0x0D
 #define SELF_TEST_Y 0x0E
@@ -94,13 +94,13 @@
 #define DEV_RESET_BIT 7
 #define FIFO_EN_BIT 6
 #define FIFO_RESET_BIT 2
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 
 namespace cacaosd_mpu6050 {
 
     class MPU6050 {
     public:
-        MPU6050(BBB_I2C *i2c);
+        MPU6050(I2cPort *i2c);
 
         virtual ~MPU6050();
 
@@ -110,7 +110,7 @@ namespace cacaosd_mpu6050 {
 
         void setDeviceAddress(uint8_t DEV_ADD);
 
-        uint8_t getDeviceAddress();
+        uint8_t getDeviceAddress() const;
 
         void setSleepMode(bool mode);
 
@@ -202,8 +202,9 @@ namespace cacaosd_mpu6050 {
         uint8_t getFIFO_Reset();
 
     private:
-        BBB_I2C *i2c;
-        uint8_t DEV_ADD;
+        I2cPort *i2c;
+        uint8_t device_address;
+
     };
 }  // namespace cacaosd_mpu6050
 #endif	/* MPU6050_H */

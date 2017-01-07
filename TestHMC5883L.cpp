@@ -17,7 +17,7 @@
 
 #include "AllDevices.h"
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 using namespace cacaosd_hmc5883l;
 
 int ctrl;
@@ -27,7 +27,7 @@ int main() {
 	ctrl = 1;
 	signal(SIGINT, signal_handler);
 
-	BBB_I2C *i2c = new BBB_I2C(HMC5883L_DEV_ADD, 2);
+	I2cPort *i2c = new I2cPort(HMC5883L_DEV_ADD, 2);
 	i2c->openConnection();
 
 	HMC5883L *hmc5883L = new HMC5883L(i2c);

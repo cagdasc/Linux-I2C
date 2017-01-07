@@ -18,7 +18,7 @@
 #ifndef HMC5883L_H
 #define HMC5883L_H
 
-#include "BBB_I2C.h"
+#include "I2cPort.h"
 
 #define HMC5883L_DEV_ADD 0x1E
 #define CONFIG_A 0x00
@@ -78,57 +78,61 @@
 
 #define RDY_BIT 0x00
 #define LOCK_BIT 0x01
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 
 namespace cacaosd_hmc5883l {
 
     class HMC5883L {
     public:
-        HMC5883L(BBB_I2C *i2c);
+        HMC5883L(I2cPort *i2c);
 
         virtual ~HMC5883L();
 
         void initialize();
 
+        uint8_t getDeviceAddress() const;
+
+        void setDeviceAddress(uint8_t device_address);
+
         void setSamplesAvarage(uint8_t avarage);
 
-        uint8_t getSamplesAvarage();
+        uint8_t getSamplesAvarage() const;
 
         void setOutputRate(uint8_t rate);
 
-        uint8_t getOutputRate();
+        uint8_t getOutputRate() const;
 
         void setMeasurementMode(uint8_t mode);
 
-        uint8_t getMeasurementMode();
+        uint8_t getMeasurementMode() const;
 
         void setMeasurementGain(uint8_t gain);
 
-        uint8_t getMeasurementGain();
+        uint8_t getMeasurementGain() const;
 
         void setOperationMode(uint8_t mode);
 
-        uint8_t getOperationMode();
+        uint8_t getOperationMode() const;
 
-        int16_t getMagnitudeX();
+        int16_t getMagnitudeX() const;
 
-        int16_t getMagnitudeY();
+        int16_t getMagnitudeY() const;
 
-        int16_t getMagnitudeZ();
+        int16_t getMagnitudeZ() const;
 
-        uint8_t getRDYStatus();
+        uint8_t getRDYStatus() const;
 
-        uint8_t getLockStatus();
+        uint8_t getLockStatus() const;
 
-        uint8_t getIDA();
+        uint8_t getIDA() const;
 
-        uint8_t getIDB();
+        uint8_t getIDB() const;
 
-        uint8_t getIDC();
+        uint8_t getIDC() const;
 
     private:
-        BBB_I2C *i2c;
-        uint8_t DEV_ADD;
+        I2cPort *i2c;
+        uint8_t device_address;
     };
 }  // namespace cacaosd_hmc5883l
 #endif	/* HMC5883L_H */

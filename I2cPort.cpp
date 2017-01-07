@@ -15,15 +15,15 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BBB_I2C.h"
+#include "I2cPort.h"
 
-namespace cacaosd_bbb_i2c {
+namespace cacaosd_i2cport {
 
 /**
- * @funtion BBB_I2C(uint8_t bus_addr)
+ * @funtion I2cPort(uint8_t bus_addr)
  * @param bus_addr I2C Bus address.
  */
-    BBB_I2C::BBB_I2C(uint8_t busAddr) {
+    I2cPort::I2cPort(uint8_t busAddr) {
         this->connection_open = false;
         this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
@@ -31,11 +31,11 @@ namespace cacaosd_bbb_i2c {
     }
 
 /**
- * @funtion BBB_I2C(uint8_t dev_addr, uint8_t bus_addr)
+ * @funtion I2cPort(uint8_t dev_addr, uint8_t bus_addr)
  * @param dev_addr Device Address
  * @param bus_addr I2C Bus address.
  */
-    BBB_I2C::BBB_I2C(uint8_t dev_addr, uint8_t busAddr) {
+    I2cPort::I2cPort(uint8_t dev_addr, uint8_t busAddr) {
         this->connection_open = false;
         this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
@@ -44,10 +44,10 @@ namespace cacaosd_bbb_i2c {
     }
 
 /** Default Destructor
- * @funtion ~BBB_I2C()
+ * @funtion ~I2cPort()
  *
  */
-    BBB_I2C::~BBB_I2C() {
+    I2cPort::~I2cPort() {
         free(path);
         this->closeConnection();
     }
@@ -56,7 +56,7 @@ namespace cacaosd_bbb_i2c {
  * @funtion setBusAddress(uint8_t bus_addr)
  * @param bus_addr I2C Bus address.
  */
-    void BBB_I2C::setBusAddress(uint8_t busAddr) {
+    void I2cPort::setBusAddress(uint8_t busAddr) {
         free(path);
         this->bus_addr = busAddr;
         this->path = (char *) calloc(PATH_SIZE, sizeof(char));
@@ -67,7 +67,7 @@ namespace cacaosd_bbb_i2c {
  * @funtion getBusAddress()
  * @return bus_addr I2C Bus address.
  */
-    uint8_t BBB_I2C::getBusAddress() {
+    uint8_t I2cPort::getBusAddress() {
         return this->bus_addr;
     }
 
@@ -75,7 +75,7 @@ namespace cacaosd_bbb_i2c {
  * @funtion setDevAddr(uint8_t dev_addr)
  * @param dev_addr Device Address
  */
-    void BBB_I2C::setDevAddr(uint8_t dev_addr) {
+    void I2cPort::setDevAddr(uint8_t dev_addr) {
         this->dev_addr = dev_addr;
     }
 
@@ -83,14 +83,14 @@ namespace cacaosd_bbb_i2c {
  * @funtion getDevAddr()
  * @return dev_addr Device Address
  */
-    uint8_t BBB_I2C::getDevAddr() {
+    uint8_t I2cPort::getDevAddr() {
         return this->dev_addr;
     }
 /**
  * @function openConnection()
  * @return file type of int
  */
-    void BBB_I2C::openConnection() {
+    void I2cPort::openConnection() {
         int file;
 
         if ((file = open(path, O_RDWR)) < 0) {
@@ -112,7 +112,7 @@ namespace cacaosd_bbb_i2c {
         this->file_descriptor = file;
     }
 
-    void BBB_I2C::closeConnection() {
+    void I2cPort::closeConnection() {
         this->connection_open = false;
         close(this->file_descriptor);
     }
@@ -125,7 +125,7 @@ namespace cacaosd_bbb_i2c {
  * @param bitNum Bit Number for writing.
  * @return void.
  */
-    void BBB_I2C::writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum) {
+    void I2cPort::writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum) {
         int8_t temp = readByte(DATA_REGADD);
         if (data == 0) {
             temp = temp & ~(1 << bitNum);
@@ -147,7 +147,7 @@ namespace cacaosd_bbb_i2c {
  * @param startBit Starting point of the data.
  * @return void.
  */
-    void BBB_I2C::writeMoreBits(uint8_t DATA_REGADD, uint8_t data, uint8_t length,
+    void I2cPort::writeMoreBits(uint8_t DATA_REGADD, uint8_t data, uint8_t length,
                                 uint8_t startBit) {
         int8_t temp = readByte(DATA_REGADD);
         uint8_t bits = 1;
@@ -174,7 +174,7 @@ namespace cacaosd_bbb_i2c {
  * @param data Writing data.
  * @return void.
  */
-    void BBB_I2C::writeByte(uint8_t DATA_REGADD, uint8_t data) {
+    void I2cPort::writeByte(uint8_t DATA_REGADD, uint8_t data) {
 
         uint8_t buffer[2];
 
@@ -195,7 +195,7 @@ namespace cacaosd_bbb_i2c {
  * @param length Array length.
  * @return void.
  */
-    void BBB_I2C::writeByteBuffer(uint8_t DATA_REGADD, uint8_t *data,
+    void I2cPort::writeByteBuffer(uint8_t DATA_REGADD, uint8_t *data,
                                   uint8_t length) {
 
         uint8_t buffer[1];
@@ -217,7 +217,7 @@ namespace cacaosd_bbb_i2c {
  * @param data Writing data.
  * @return void.
  */
-    void BBB_I2C::writeByteArduino(int8_t data) {
+    void I2cPort::writeByteArduino(int8_t data) {
 
         int8_t buffer[1];
         buffer[0] = data;
@@ -235,7 +235,7 @@ namespace cacaosd_bbb_i2c {
  * @param length Array length.
  * @return void.
  */
-    void BBB_I2C::writeByteBufferArduino(uint8_t *data, uint8_t length) {
+    void I2cPort::writeByteBufferArduino(uint8_t *data, uint8_t length) {
 
         if (write(this->file_descriptor, data, length) != length) {
             msg_error("Can not write data. Address %d.", dev_addr);
@@ -251,7 +251,7 @@ namespace cacaosd_bbb_i2c {
  * @return uint8_t bit value.
  */
 
-    uint8_t BBB_I2C::readBit(uint8_t DATA_REGADD, uint8_t bitNum) {
+    uint8_t I2cPort::readBit(uint8_t DATA_REGADD, uint8_t bitNum) {
         int8_t temp = readByte(DATA_REGADD);
         return (temp >> bitNum) % 2;
     }
@@ -264,7 +264,7 @@ namespace cacaosd_bbb_i2c {
  * @param startBit Starting point of the value.
  * @return uint8_t bit value.
  */
-    uint8_t BBB_I2C::readMoreBits(uint8_t DATA_REGADD, uint8_t length,
+    uint8_t I2cPort::readMoreBits(uint8_t DATA_REGADD, uint8_t length,
                                   uint8_t startBit) {
         int8_t temp = readByte(DATA_REGADD);
         return (temp >> startBit) % (uint8_t) pow(2, length);
@@ -276,7 +276,7 @@ namespace cacaosd_bbb_i2c {
  * @param DATA_REGADD Data Register Address.
  * @return uint8_t bit value.
  */
-    uint8_t BBB_I2C::readByte(uint8_t DATA_REGADD) {
+    uint8_t I2cPort::readByte(uint8_t DATA_REGADD) {
 
         uint8_t buffer[1];
         buffer[0] = DATA_REGADD;
@@ -302,7 +302,7 @@ namespace cacaosd_bbb_i2c {
  * @param length Array length.
  * @return void.
  */
-    void BBB_I2C::readByteBuffer(uint8_t DATA_REGADD, uint8_t *data,
+    void I2cPort::readByteBuffer(uint8_t DATA_REGADD, uint8_t *data,
                                  uint8_t length) {
 
         uint8_t buffer[1];
@@ -325,7 +325,7 @@ namespace cacaosd_bbb_i2c {
  * @param length Array length.
  * @return void.
  */
-    void BBB_I2C::readByteBufferArduino(uint8_t *data, uint8_t length) {
+    void I2cPort::readByteBufferArduino(uint8_t *data, uint8_t length) {
 
         if (read(this->file_descriptor, data, length) != length) {
             msg_error("Can not read data. Address %d.", dev_addr);
@@ -340,7 +340,7 @@ namespace cacaosd_bbb_i2c {
  * @param LSB 16-bit values Less Significant Byte Address..
  * @return void.
  */
-    int16_t BBB_I2C::readWord(uint8_t MSB, uint8_t LSB) {
+    int16_t I2cPort::readWord(uint8_t MSB, uint8_t LSB) {
 
         uint8_t msb = readByte(MSB);
 
@@ -349,4 +349,4 @@ namespace cacaosd_bbb_i2c {
         return ((int16_t) msb << 8) + lsb;
     }
 
-}  // namespace cacaosd_bbb_i2c
+}  // namespace cacaosd_i2cport

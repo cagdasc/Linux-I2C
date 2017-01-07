@@ -16,7 +16,7 @@
  */
 #include "AllDevices.h"
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 using namespace cacaosd_mpu6050;
 using namespace cacaosd_hmc5883l;
 using namespace cacaosd_adxl345;
@@ -27,13 +27,13 @@ int main() {
     ctrl = 1;
 
     signal(SIGINT, signal_handler);
-    BBB_I2C *i2c0 = new BBB_I2C(0x69, 2);
+    I2cPort *i2c0 = new I2cPort(0x69, 2);
     i2c0->openConnection();
 
-    BBB_I2C *i2c1 = new BBB_I2C(0x1E, 2);
+    I2cPort *i2c1 = new I2cPort(0x1E, 2);
     i2c1->openConnection();
 
-    BBB_I2C *i2c2 = new BBB_I2C(0x53, 2);
+    I2cPort *i2c2 = new I2cPort(0x53, 2);
     i2c2->openConnection();
 
     MPU6050 *mpu6050 = new MPU6050(i2c0);

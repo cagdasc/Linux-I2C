@@ -20,7 +20,7 @@
 namespace cacaosd_mpu6050 {
 
 
-    MPU6050::MPU6050(BBB_I2C *i2c) {
+    MPU6050::MPU6050(I2cPort *i2c) {
         this->i2c = i2c;
     }
 
@@ -55,14 +55,14 @@ namespace cacaosd_mpu6050 {
  * @see DEF_DEV_ADD
  */
     void MPU6050::setDeviceAddress(uint8_t DEV_ADD) {
-        this->DEV_ADD = DEV_ADD;
+        this->device_address = DEV_ADD;
     }
 
 /** Get device address.
  * @return device address
  */
-    uint8_t MPU6050::getDeviceAddress() {
-        return this->DEV_ADD;
+    uint8_t MPU6050::getDeviceAddress() const {
+        return this->device_address;
     }
 
 /** Set sleep mode status.

@@ -19,12 +19,20 @@
 
 namespace cacaosd_hmc5883l {
 
-    HMC5883L::HMC5883L(BBB_I2C *i2c) {
+    HMC5883L::HMC5883L(I2cPort *i2c) {
         this->i2c = i2c;
     }
 
     HMC5883L::~HMC5883L() {
 
+    }
+
+    uint8_t HMC5883L::getDeviceAddress() const {
+        return device_address;
+    }
+
+    void HMC5883L::setDeviceAddress(uint8_t device_address) {
+        HMC5883L::device_address = device_address;
     }
 
 /** Power on and prepare for general usage.
@@ -69,7 +77,7 @@ namespace cacaosd_hmc5883l {
  * @see CONFIG_A
  * @see SAMPLES_AVARAGE_LENGTH
  */
-    uint8_t HMC5883L::getSamplesAvarage() {
+    uint8_t HMC5883L::getSamplesAvarage() const {
         return i2c->readMoreBits(CONFIG_A, SAMPLES_AVARAGE_LENGTH,
                                  SAMPLES_AVARAGE_START);
     }
@@ -128,7 +136,7 @@ namespace cacaosd_hmc5883l {
  * @see CONFIG_A
  * @see OUTPUT_RATE_LENGTH
  */
-    uint8_t HMC5883L::getOutputRate() {
+    uint8_t HMC5883L::getOutputRate() const {
         return i2c->readMoreBits(CONFIG_A, OUTPUT_RATE_LENGTH,
                                  OUTPUT_RATE_START);
     }
@@ -156,7 +164,7 @@ namespace cacaosd_hmc5883l {
  * @see CONFIG_A
  * @see MEASUREMENT_LENGTH
  */
-    uint8_t HMC5883L::getMeasurementMode() {
+    uint8_t HMC5883L::getMeasurementMode() const {
         return i2c->readMoreBits(CONFIG_A, MEASUREMENT_LENGTH,
                                  MEASUREMENT_START);
     }
@@ -207,7 +215,7 @@ namespace cacaosd_hmc5883l {
  * @see CONFIG_B
  * @see GAIN_LENGTH
  */
-    uint8_t HMC5883L::getMeasurementGain() {
+    uint8_t HMC5883L::getMeasurementGain() const {
         return i2c->readMoreBits(CONFIG_B, GAIN_LENGTH, GAIN_START);
     }
 
@@ -247,7 +255,7 @@ namespace cacaosd_hmc5883l {
  * @see MODE_REG
  * @see OPERATION_MODE_LENGTH
  */
-    uint8_t HMC5883L::getOperationMode() {
+    uint8_t HMC5883L::getOperationMode() const {
         return i2c->readMoreBits(MODE_REG, OPERATION_MODE_LENGTH,
                                  OPERATION_MODE_START);
     }
@@ -256,7 +264,7 @@ namespace cacaosd_hmc5883l {
  * @return 16-bit signed integer with X-axis heading
  * @see X_HIGH
  */
-    int16_t HMC5883L::getMagnitudeX() {
+    int16_t HMC5883L::getMagnitudeX() const {
         return i2c->readWord(X_HIGH, X_LOW);
     }
 
@@ -264,7 +272,7 @@ namespace cacaosd_hmc5883l {
  * @return 16-bit signed integer with Y-axis heading
  * @see Y_HIGH
  */
-    int16_t HMC5883L::getMagnitudeY() {
+    int16_t HMC5883L::getMagnitudeY() const {
         return i2c->readWord(Y_HIGH, Y_LOW);
     }
 
@@ -272,7 +280,7 @@ namespace cacaosd_hmc5883l {
  * @return 16-bit signed integer with Z-axis heading
  * @see Z_HIGH
  */
-    int16_t HMC5883L::getMagnitudeZ() {
+    int16_t HMC5883L::getMagnitudeZ() const {
         return i2c->readWord(Z_HIGH, Z_LOW);
     }
 
@@ -286,7 +294,7 @@ namespace cacaosd_hmc5883l {
  * @see STATUS_REG
  * @see RDY_BIT
  */
-    uint8_t HMC5883L::getRDYStatus() {
+    uint8_t HMC5883L::getRDYStatus() const {
         return i2c->readBit(STATUS_REG, RDY_BIT);
     }
 
@@ -301,28 +309,28 @@ namespace cacaosd_hmc5883l {
  * @see STATUS_REG
  * @see LOCK_BIT
  */
-    uint8_t HMC5883L::getLockStatus() {
+    uint8_t HMC5883L::getLockStatus() const {
         return i2c->readBit(STATUS_REG, LOCK_BIT);
     }
 
 /** Get identification byte A
  * @return ID_A byte (should be 01001000, ASCII value 'H')
  */
-    uint8_t HMC5883L::getIDA() {
+    uint8_t HMC5883L::getIDA() const {
         return i2c->readByte(ID_REG_A);
     }
 
 /** Get identification byte B
  * @return ID_A byte (should be 00110100, ASCII value '4')
  */
-    uint8_t HMC5883L::getIDB() {
+    uint8_t HMC5883L::getIDB() const {
         return i2c->readByte(ID_REG_B);
     }
 
 /** Get identification byte C
  * @return ID_A byte (should be 00110011, ASCII value '3')
  */
-    uint8_t HMC5883L::getIDC() {
+    uint8_t HMC5883L::getIDC() const {
         return i2c->readByte(ID_REG_C);
     }
 

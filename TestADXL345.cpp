@@ -17,7 +17,7 @@
 
 #include "AllDevices.h"
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 using namespace cacaosd_adxl345;
 
 int ctrl;
@@ -27,7 +27,7 @@ int main() {
     ctrl = 1;
     signal(SIGINT, signal_handler);
 
-    BBB_I2C *i2c = new BBB_I2C(ADXL345_DEFAULT_ADDRESS, 2);
+    I2cPort *i2c = new I2cPort(ADXL345_DEFAULT_ADDRESS, 2);
     i2c->openConnection();
 
     ADXL345 *adxl345 = new ADXL345(i2c);

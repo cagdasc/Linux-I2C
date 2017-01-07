@@ -15,8 +15,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BBB_I2C_H
-#define    BBB_I2C_H
+#ifndef I2cPort_H
+#define    I2cPort_H
 
 #include <math.h>
 #include <stdlib.h>
@@ -32,16 +32,16 @@
 #define msg_error(M, ...) printf("[ERROR]:" M "\n", ##__VA_ARGS__);
 #define msg_warning(M, ...) printf("[WARNING]:" M "\n", ##__VA_ARGS__);
 
-namespace cacaosd_bbb_i2c {
+namespace cacaosd_i2cport {
 
-    class BBB_I2C {
+    class I2cPort {
     public:
 
-        BBB_I2C(uint8_t busAddr);
+        I2cPort(uint8_t busAddr);
 
-        BBB_I2C(uint8_t DEV_ADD, uint8_t busAddr);
+        I2cPort(uint8_t DEV_ADD, uint8_t busAddr);
 
-        ~BBB_I2C();
+        ~I2cPort();
 
         void openConnection();
 
@@ -95,7 +95,7 @@ namespace cacaosd_bbb_i2c {
         bool connection_open;
 
     };
-}  // namespace cacaosd_bbb_i2c
+}  // namespace cacaosd_i2cport
 
-#endif	/* BBB_I2C_H */
+#endif	/* I2cPort_H */
 

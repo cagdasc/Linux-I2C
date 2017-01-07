@@ -18,7 +18,7 @@
 #ifndef ADXL345_H
 #define    ADXL345_H
 
-#include "BBB_I2C.h"
+#include "I2cPort.h"
 
 #define ADXL345_DEFAULT_ADDRESS    0x53
 #define ADXL345_RA_DEVID            0x00
@@ -145,13 +145,13 @@
 #define ADXL345_FIFOSTAT_LENGTH_BIT         5
 #define ADXL345_FIFOSTAT_BIT_START      6
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 
 namespace cacaosd_adxl345 {
 
     class ADXL345 {
     public:
-        ADXL345(BBB_I2C *i2c);
+        ADXL345(I2cPort *i2c);
 
         virtual ~ADXL345();
 
@@ -459,8 +459,8 @@ namespace cacaosd_adxl345 {
         uint8_t getFIFOLength();
 
     private:
-        BBB_I2C *i2c;
-        uint8_t DEV_ADD;
+        I2cPort *i2c;
+        uint8_t device_address;
     };
 
 }  // namespace cacaosd_adxl345

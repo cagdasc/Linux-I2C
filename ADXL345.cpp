@@ -17,12 +17,12 @@
 
 #include "ADXL345.h"
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 
 namespace cacaosd_adxl345 {
 
 
-    ADXL345::ADXL345(BBB_I2C *i2c) {
+    ADXL345::ADXL345(I2cPort *i2c) {
         this->i2c = i2c;
     }
 
@@ -30,12 +30,12 @@ namespace cacaosd_adxl345 {
         delete i2c;
     }
 
-    void ADXL345::setDeviceAddress(uint8_t DEV_ADD) {
-        this->DEV_ADD = DEV_ADD;
+    void ADXL345::setDeviceAddress(uint8_t device_address) {
+        this->device_address = device_address;
     }
 
     uint8_t ADXL345::getDeviceAddress() {
-        return this->DEV_ADD;
+        return this->device_address;
     }
 
 /** Power on and prepare for general usage.

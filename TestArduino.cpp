@@ -15,16 +15,16 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <stdio.h>
-#include "BBB_I2C.h"
+#include "I2cPort.h"
 
 #define DEV_ADD 0x21
 #define I2C_BUS 1
 
-using namespace cacaosd_bbb_i2c;
+using namespace cacaosd_i2cport;
 
 int main(int argc, char **argv) {
 
-	BBB_I2C i2c(DEV_ADD, I2C_BUS);
+	I2cPort i2c(DEV_ADD, I2C_BUS);
 	int data_length = 3;
 
 	uint8_t *dataArray;
