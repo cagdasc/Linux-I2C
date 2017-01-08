@@ -37,9 +37,9 @@ namespace cacaosd_i2cport {
     class I2cPort {
     public:
 
-        I2cPort(uint8_t busAddr);
+        I2cPort(uint8_t bus_address);
 
-        I2cPort(uint8_t DEV_ADD, uint8_t busAddr);
+        I2cPort(uint8_t device_address, uint8_t bus_address);
 
         ~I2cPort();
 
@@ -52,13 +52,13 @@ namespace cacaosd_i2cport {
             return connection_open;
         }
 
-        void setBusAddress(uint8_t busAddr);
+        void setBusAddress(uint8_t bus_address);
 
-        uint8_t getBusAddress();
+        uint8_t getBusAddress() const;
 
-        void setDevAddr(uint8_t DEV_ADD);
+        void setDeviceAddress(uint8_t device_address);
 
-        uint8_t getDevAddr();
+        uint8_t getDeviceAddress() const;
 
         void writeBit(uint8_t DATA_REGADD, uint8_t data, uint8_t bitNum);
 
@@ -89,8 +89,8 @@ namespace cacaosd_i2cport {
 
     private:
         int file_descriptor;
-        uint8_t bus_addr;
-        uint8_t dev_addr;
+        uint8_t bus_address;
+        uint8_t device_address;
         char *path;
         bool connection_open;
 
