@@ -20,6 +20,13 @@
 namespace cacaosd_i2cport {
 
 /**
+ * @funtion I2cPort()
+ */
+    I2cPort::I2cPort() {
+        this->connection_open = false;
+    }
+
+/**
  * @funtion I2cPort(uint8_t bus_addr)
  * @param bus_addr I2C Bus address.
  */
@@ -83,9 +90,10 @@ namespace cacaosd_i2cport {
  * @funtion getDevAddr()
  * @return dev_addr Device Address
  */
-    uint8_t I2cPort::getDeviceAddress()  const {
+    uint8_t I2cPort::getDeviceAddress() const {
         return this->device_address;
     }
+
 /**
  * @function openConnection()
  * @return file type of int

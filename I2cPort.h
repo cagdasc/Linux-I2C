@@ -37,6 +37,8 @@ namespace cacaosd_i2cport {
     class I2cPort {
     public:
 
+        I2cPort();
+
         I2cPort(uint8_t bus_address);
 
         I2cPort(uint8_t device_address, uint8_t bus_address);
