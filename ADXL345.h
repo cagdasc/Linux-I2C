@@ -172,7 +172,7 @@ namespace cacaosd_adxl345 {
         void setTapThreshold(uint8_t threshold);
 
         // OFS* registers
-        void getOffset(int8_t *x, int8_t *y, int8_t *z);
+        void getOffset(int8_t *offsets);
 
         void setOffset(int8_t x, int8_t y, int8_t z);
 
@@ -432,7 +432,7 @@ namespace cacaosd_adxl345 {
         void setRange(uint8_t range);
 
         // DATA* registers
-        void getAcceleration(int16_t *x, int16_t *y, int16_t *z);
+        void getAccelerations(int16_t *accels);
 
         int16_t getAccelerationX();
 

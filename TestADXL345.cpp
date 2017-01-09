@@ -32,17 +32,20 @@ int main() {
 
     ADXL345 *adxl345 = new ADXL345(i2c);
     adxl345->initialize();
-
+    int16_t *accels = (int16_t *) calloc(3, sizeof(int16_t));
     while (ctrl) {
+        adxl345->getAccelerations(accels);
         std::cout << "ADXL345" << std::endl;
-        std::cout << "Raw Accel X: " << adxl345->getAccelerationX() << std::endl;
-        std::cout << "Raw Accel Y: " << adxl345->getAccelerationY() << std::endl;
-        std::cout << "Raw Accel Z: " << adxl345->getAccelerationZ() << std::endl;
+        std::cout << "Raw Accel X: " << accels[0] << std::endl;
+        std::cout << "Raw Accel Y: " << accels[1] << std::endl;
+        std::cout << "Raw Accel Z: " << accels[2] << std::endl;
         std::cout << "----------------------" << std::endl;
 
         usleep(200000);
     }
 
+    free(accels);
+    i2c->closeConnection();
     delete i2c, adxl345;
 
     return 0;

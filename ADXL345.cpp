@@ -80,6 +80,19 @@ namespace cacaosd_adxl345 {
         i2c->writeByte(ADXL345_RA_THRESH_TAP, threshold);
     }
 
+    /** Get axis offsets.
+ * @param offsets array of offset
+ * @see getOffset()
+ * @see ADXL345_RA_OFSX
+ * @see ADXL345_RA_OFSY
+ * @see ADXL345_RA_OFSZ
+ */
+    void ADXL345::getOffset(int8_t *offsets) {
+        offsets[0] = this->getOffsetX();
+        offsets[1] = this->getOffsetY();
+        offsets[2] = this->getOffsetZ();
+    }
+
 /** Set axis offsets.
  * @param x X axis offset value
  * @param y Y axis offset value
@@ -1525,10 +1538,10 @@ namespace cacaosd_adxl345 {
  * @param z 16-bit signed integer container for Z-axis acceleration
  * @see ADXL345_RA_DATAX0
  */
-    void ADXL345::getAcceleration(int16_t *x, int16_t *y, int16_t *z) {
-        *x = i2c->readWord(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
-        *y = i2c->readWord(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
-        *z = i2c->readWord(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
+    void ADXL345::getAccelerations(int16_t *accels) {
+        accels[0] = i2c->readWord(ADXL345_RA_DATAX1, ADXL345_RA_DATAX0);
+        accels[1] = i2c->readWord(ADXL345_RA_DATAY1, ADXL345_RA_DATAY0);
+        accels[2] = i2c->readWord(ADXL345_RA_DATAZ1, ADXL345_RA_DATAZ0);
     }
 
 /** Get X-axis accleration measurement.
