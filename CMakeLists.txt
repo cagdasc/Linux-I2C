@@ -16,17 +16,17 @@ set(ADXL_SRC_FILES
         TestADXL345.cpp)
 
 set(MPU6050_SRC_FILES
-        I2cPort.cpp
-        I2cPort.h
         MPU6050.cpp
         MPU6050.h
+        I2cPort.cpp
+        I2cPort.h
         TestMpu6050.cpp)
 
 set(HMC5883L_SRC_FILES
-        I2cPort.cpp
-        I2cPort.h
         HMC5883L.cpp
         HMC5883L.h
+        I2cPort.cpp
+        I2cPort.h
         TestHMC5883L.cpp)
 
 set(ALL_DEV_SRC_FILES

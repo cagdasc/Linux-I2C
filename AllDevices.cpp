@@ -42,7 +42,7 @@ int main() {
 
     //Initialize devices
     if (i2c0->isConnectionOpen()) {
-        mpu6050->init();
+        mpu6050->initialize();
     } else {
         exit(1);
     }
@@ -66,6 +66,9 @@ int main() {
         std::cout << "Accel X: " << (float) mpu6050->getAccelerationX() / k << std::endl;
         std::cout << "Accel Y: " << (float) mpu6050->getAccelerationY() / k << std::endl;
         std::cout << "Accel Z: " << (float) mpu6050->getAccelerationZ() / k << std::endl;
+        std::cout << "Gyro X: " << (float) mpu6050->getAccelerationX() / k << std::endl;
+        std::cout << "Gyro Y: " << (float) mpu6050->getAccelerationY() / k << std::endl;
+        std::cout << "Gyro Z: " << (float) mpu6050->getAccelerationZ() / k << std::endl;
         std::cout << "----------------------" << std::endl;
 
         usleep(20000);

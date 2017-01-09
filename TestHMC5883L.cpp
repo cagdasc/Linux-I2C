@@ -42,7 +42,9 @@ int main() {
 		usleep(200000);
 	}
 
+	i2c->closeConnection();
 	delete i2c, hmc5883L;
+
 	return 0;
 }
 
