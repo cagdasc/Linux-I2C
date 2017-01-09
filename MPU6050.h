@@ -104,7 +104,7 @@ namespace cacaosd_mpu6050 {
 
         virtual ~MPU6050();
 
-        void init();
+        void initialize();
 
         void reset();
 
@@ -124,7 +124,7 @@ namespace cacaosd_mpu6050 {
 
         uint8_t getRangeGyroscope();
 
-        void getAccelerations(int16_t *ax, int16_t *ay, int16_t *az);
+        void getAccelerations(int16_t *accels);
 
         int16_t getAccelerationX();
 
@@ -132,7 +132,7 @@ namespace cacaosd_mpu6050 {
 
         int16_t getAccelerationZ();
 
-        void getAngularVelocities(int16_t *gx, int16_t *gy, int16_t *gz);
+        void getAngularVelocities(int16_t *gyros);
 
         int16_t getAngularVelocityX();
 
@@ -140,8 +140,7 @@ namespace cacaosd_mpu6050 {
 
         int16_t getAngularVelocityZ();
 
-        void getMotions6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx,
-                         int16_t *gy, int16_t *gz);
+        void getMotions6(int16_t *motion6);
 
         int16_t getTemperature();
 

@@ -35,7 +35,7 @@ namespace cacaosd_mpu6050 {
  * the clock source to use the X Gyro for reference, which is slightly better than
  * the default internal clock source.
  */
-    void MPU6050::init() {
+    void MPU6050::initialize() {
         setRangeAcceleration(0);
         setRangeGyroscope(0);
         setSleepMode(false);
@@ -188,12 +188,10 @@ namespace cacaosd_mpu6050 {
         return fs;
     }
 
-    void MPU6050::getAccelerations(int16_t *ax, int16_t *ay, int16_t *az) {
-
-        *ax = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
-        *ay = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
-        *az = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
-
+    void MPU6050::getAccelerations(int16_t *accels) {
+        accels[0] = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+        accels[1] = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+        accels[2] = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
     }
 
     int16_t MPU6050::getAccelerationX() {
@@ -208,12 +206,10 @@ namespace cacaosd_mpu6050 {
         return i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
     }
 
-    void MPU6050::getAngularVelocities(int16_t *gx, int16_t *gy, int16_t *gz) {
-
-        *gx = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
-        *gy = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
-        *gz = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
-
+    void MPU6050::getAngularVelocities(int16_t *gyros) {
+        gyros[0] = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+        gyros[1] = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+        gyros[2] = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
     }
 
     int16_t MPU6050::getAngularVelocityX() {
@@ -232,17 +228,14 @@ namespace cacaosd_mpu6050 {
         return i2c->readWord(TEMP_OUT_H, TEMP_OUT_L);
     }
 
-    void MPU6050::getMotions6(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx,
-                              int16_t *gy, int16_t *gz) {
+    void MPU6050::getMotions6(int16_t *motion6) {
+        motion6[0] = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
+        motion6[1] = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
+        motion6[2] = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
 
-        *ax = i2c->readWord(ACCEL_XOUT_H, ACCEL_XOUT_L);
-        *ay = i2c->readWord(ACCEL_YOUT_H, ACCEL_YOUT_L);
-        *az = i2c->readWord(ACCEL_ZOUT_H, ACCEL_ZOUT_L);
-
-        *gx = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
-        *gy = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
-        *gz = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
-
+        motion6[3] = i2c->readWord(GYRO_XOUT_H, GYRO_XOUT_L);
+        motion6[4] = i2c->readWord(GYRO_YOUT_H, GYRO_YOUT_L);
+        motion6[5] = i2c->readWord(GYRO_ZOUT_H, GYRO_ZOUT_L);
     }
 
 /** Set digital low-pass filter configuration.
