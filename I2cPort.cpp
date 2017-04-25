@@ -27,7 +27,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @funtion I2cPort(uint8_t bus_addr)
+ * @funtion I2cPort(uint8_t bus_address)
  * @param bus_addr I2C Bus address.
  */
     I2cPort::I2cPort(uint8_t bus_address) {
@@ -38,9 +38,9 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @funtion I2cPort(uint8_t dev_addr, uint8_t bus_addr)
- * @param dev_addr Device Address
- * @param bus_addr I2C Bus address.
+ * @funtion I2cPort(uint8_t device_address, uint8_t bus_address)
+ * @param device_address Device Address
+ * @param bus_address I2C Bus address.
  */
     I2cPort::I2cPort(uint8_t device_address, uint8_t bus_address) {
         this->connection_open = false;
@@ -60,8 +60,8 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @funtion setBusAddress(uint8_t bus_addr)
- * @param bus_addr I2C Bus address.
+ * @funtion setBusAddress(uint8_t bus_address)
+ * @param bus_address I2C Bus address.
  */
     void I2cPort::setBusAddress(uint8_t bus_address) {
         free(path);
@@ -79,7 +79,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @funtion setDevAddr(uint8_t dev_addr)
+ * @funtion setDeviceAddress(uint8_t device_address)
  * @param dev_addr Device Address
  */
     void I2cPort::setDeviceAddress(uint8_t device_address) {
@@ -87,8 +87,8 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @funtion getDevAddr()
- * @return dev_addr Device Address
+ * @funtion getDeviceAddress()
+ * @return device_address Device Address
  */
     uint8_t I2cPort::getDeviceAddress() const {
         return this->device_address;
@@ -120,14 +120,17 @@ namespace cacaosd_i2cport {
         this->file_descriptor = file;
     }
 
+/** Close connection.
+ * @function closeConnection()
+ * @return void
+ */
     void I2cPort::closeConnection() {
         this->connection_open = false;
         close(this->file_descriptor);
     }
 
 /**
- * @function writeBit(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t data, int bitNum)
- * @param dev_addr Device Address.
+ * @function writeBit(uint8_t DATA_REGADD, uint8_t data, int bitNum)
  * @param DATA_REGADD Data Register Address.
  * @param data Writing data.
  * @param bitNum Bit Number for writing.
@@ -176,8 +179,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function writeByte(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t data)
- * @param dev_addr Device Address.
+ * @function writeByte(uint8_t DATA_REGADD, uint8_t data)
  * @param DATA_REGADD Data Register Address.
  * @param data Writing data.
  * @return void.
@@ -196,8 +198,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function writeByteBuffer(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
- * @param dev_addr Device Address.
+ * @function writeByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
  * @param DATA_REGADD Data Register Address.
  * @param data Data storage array.
  * @param length Array length.
@@ -220,8 +221,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function writeByteArduino(uint8_t dev_addr, int8_t data)
- * @param dev_addr Arduino Device Address.
+ * @function writeByteArduino(int8_t data)
  * @param data Writing data.
  * @return void.
  */
@@ -237,8 +237,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function writeByteBufferArduino(uint8_t dev_addr, uint8_t *data, uint8_t length)
- * @param dev_addr Arduino Device Address.
+ * @function writeByteBufferArduino(uint8_t *data, uint8_t length)
  * @param data Data storage array.
  * @param length Array length.
  * @return void.
@@ -252,8 +251,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readBit(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t bitNum)
- * @param dev_addr Device Address.
+ * @function readBit(uint8_t DATA_REGADD, uint8_t bitNum)
  * @param DATA_REGADD Data Register Address.
  * @param bitNum Bit Number for reading.
  * @return uint8_t bit value.
@@ -265,8 +263,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readBits(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t length, uint8_t startBit)
- * @param dev_addr Device Address.
+ * @function readBits(uint8_t DATA_REGADD, uint8_t length, uint8_t startBit)
  * @param DATA_REGADD Data Register Address.
  * @param length Bits length.
  * @param startBit Starting point of the value.
@@ -279,8 +276,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readByte(uint8_t dev_addr, uint8_t DATA_REGADD)
- * @param dev_addr Device Address.
+ * @function readByte(uint8_t DATA_REGADD)
  * @param DATA_REGADD Data Register Address.
  * @return uint8_t bit value.
  */
@@ -303,8 +299,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readByteBuffer(uint8_t dev_addr, uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
- * @param dev_addr Device Address.
+ * @function readByteBuffer(uint8_t DATA_REGADD, uint8_t *data, uint8_t length)
  * @param DATA_REGADD Data Register Address.
  * @param data Data storage array.
  * @param length Array length.
@@ -327,8 +322,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readByteBufferArduino(uint8_t dev_addr, uint8_t* data, uint8_t length)
- * @param dev_addr Arduino Device Address.
+ * @function readByteBufferArduino(uint8_t* data, uint8_t length)
  * @param data Data storage array.
  * @param length Array length.
  * @return void.
@@ -342,8 +336,7 @@ namespace cacaosd_i2cport {
     }
 
 /**
- * @function readWord(uint8_t dev_addr, uint8_t MSB, uint8_t LSB)
- * @param dev_addr Arduino Device Address.
+ * @function readWord(uint8_t MSB, uint8_t LSB)
  * @param MSB 16-bit values Most Significant Byte Address.
  * @param LSB 16-bit values Less Significant Byte Address..
  * @return void.
