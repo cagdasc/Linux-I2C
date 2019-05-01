@@ -14,13 +14,13 @@ If there is a some problem or some additional for this library, you can open an 
 
 While I write this library, I inspired from [i2cdevlib](https://github.com/jrowberg/i2cdevlib) library.
 
-#Usage
+## Usage
     $ mkdir build/
     $ cd build/
     $ cmake ..
     $ make all
 
-#License
+## License
 
 	Copyright (C) 2014  Cagdas Caglak cagdascaglak@gmail.com http://expcodes.blogspot.com.tr/
 
